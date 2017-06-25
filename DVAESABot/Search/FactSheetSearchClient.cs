@@ -10,33 +10,27 @@ using System.Web;
 
 namespace DVAESABot.Search
 {
-    class FactSheetSearchClient
+    public class FactSheetSearchClient
     {
         private readonly SearchIndexClient _searchIndexClient;
 
-        public FactSheetSearchClient()
+        public FactSheetSearchClient(string searchApiKey, string searchServiceName, string searchIndexName)
         {
-            string searchApiKey = ConfigurationManager.AppSettings["SearchServiceQueryApiKey"];  // ok to be public
-            string searchServiceName = ConfigurationManager.AppSettings["SearchServiceName"];
-            string searchIndexName = ConfigurationManager.AppSettings["SearchIndexName"];
-            _searchIndexClient = new SearchIndexClient(searchServiceName, searchServiceName,
+            _searchIndexClient = new SearchIndexClient(searchServiceName, searchIndexName,
                 new SearchCredentials(searchApiKey));
-                            
         }
 
-
-        public async Task<IList<string>> GetTopMatchingFactsheetIds(string searchQuery, int topNumber)
+        public async Task<DocumentSearchResult<FactSheet>> GetTopMatchingFactsheets(string searchQuery, int topNumber)
         {
             SearchParameters searchParameters = new SearchParameters()
             {
                 SearchMode = SearchMode.Any,
                 QueryType = QueryType.Simple,
-                Top = topNumber
+                Top = topNumber                
             };
 
-            _searchIndexClient.Documents.Search<FactSheet>(searchQuery,)
-
-            //_searchIndexClient.
+            var result = await _searchIndexClient.Documents.SearchAsync<FactSheet>(searchQuery, searchParameters);
+            return result;            
         }
         
 
