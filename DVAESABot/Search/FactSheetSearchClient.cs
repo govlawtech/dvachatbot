@@ -10,7 +10,7 @@ using System.Web;
 
 namespace DVAESABot.Search
 {
-    public class FactSheetSearchClient
+    public class FactSheetSearchClient : IDisposable
     {
         private readonly SearchIndexClient _searchIndexClient;
 
@@ -32,7 +32,11 @@ namespace DVAESABot.Search
             var result = await _searchIndexClient.Documents.SearchAsync<FactSheet>(searchQuery, searchParameters);
             return result;            
         }
-        
 
+
+        public void Dispose()
+        {
+            _searchIndexClient?.Dispose();
+        }
     }
 }
