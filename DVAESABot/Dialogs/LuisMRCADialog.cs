@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace DVAESABot.Dialogs
@@ -107,6 +106,7 @@ namespace DVAESABot.Dialogs
                 message = $"Factsheets that match:\n\n" +
                     $"{topFactsheet} ({result.TopScoringIntent.Score * 100}%)\n\n";
             }
+            DialogHelper.StoreKbDetails(context, topFactsheet);
             await PostResponseWithFeedback(context, message);
         }
 
@@ -135,13 +135,15 @@ namespace DVAESABot.Dialogs
                 if (launchQnA)
                 {
                     context.Call(new QnAMRCADialog(), ResumeAfterQnA);
-                } else
+                }
+                else
                 {
                     message = "Great to hear!";
                     await context.PostAsync(message);
                     context.Wait(MessageReceived);
                 }
-            } else
+            }
+            else
             {
                 await context.PostAsync(message);
                 context.Wait(MessageReceived);
@@ -184,6 +186,8 @@ namespace DVAESABot.Dialogs
                     message = $"We are not super confident, but we think this factsheet will help:\n\n" +
                         $"{topFactsheet} ({result.Intents[1].Score * 100}%)\n\n";
                 }
+
+                DialogHelper.StoreKbDetails(context, topFactsheet);
                 await PostResponseWithFeedback(context, message);
             }
         }
@@ -191,7 +195,7 @@ namespace DVAESABot.Dialogs
         // Helper method for posting a message with a standard feedback question
         private async Task PostResponseWithFeedback(IDialogContext context, string message)
         {
-            await PostMessage(context, message);
+            await DialogHelper.PostMessage(context, message);
             context.Wait(FeedbackReceived);
         }
 
@@ -199,26 +203,8 @@ namespace DVAESABot.Dialogs
         private async Task ResumeAfterQnA(IDialogContext context, IAwaitable<string> result)
         {
             var resultFromQnA = await result;
-            await PostMessage(context, resultFromQnA + "\n\n\n\n");
+            await DialogHelper.PostMessage(context, resultFromQnA + "\n\n\n\n");
             context.Wait(this.QnAFeedbackReceived);
-        }
-
-        private async Task PostMessage(IDialogContext context, string message)
-        {
-            var activity = context.MakeMessage();
-            activity.Text = message + "Was this answer useful?";
-            activity.Type = ActivityTypes.Message;
-            activity.TextFormat = TextFormatTypes.Markdown;
-
-            activity.SuggestedActions = new SuggestedActions()
-            {
-                Actions = new List<CardAction>()
-                    {
-                        new CardAction(){ Title = "Yes", Type=ActionTypes.ImBack, Value="Yes" },
-                        new CardAction(){ Title = "No", Type=ActionTypes.ImBack, Value="No" }
-                    }
-            };
-            await context.PostAsync(activity);
         }
     }
 }

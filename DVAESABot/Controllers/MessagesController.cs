@@ -21,8 +21,10 @@ namespace DVAESABot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                //await Conversation.SendAsync(activity, () => new Dialogs.RootDialog());
-                await Conversation.SendAsync(activity, () => new LuisMRCADialog());
+                // Funnelling with LUIS - improved from user testing 1/6
+                //await Conversation.SendAsync(activity, () => new LuisMRCADialog());
+                // Funnelling with Azure Search - Stage 2
+                await Conversation.SendAsync(activity, () => new AzureSearchDialog());
             }
             else
             {
