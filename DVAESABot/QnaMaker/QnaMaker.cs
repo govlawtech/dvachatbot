@@ -13,12 +13,10 @@ namespace DVAESABot.QnAMaker
     {
         private readonly Uri qnaBaseUri = new Uri("https://westus.api.cognitive.microsoft.com/qnamaker/v1.0");
 
-        private readonly string KbId = ConfigurationManager.AppSettings["QnaKnowledgeBaseId"];
         private readonly string SubscriptionKey = ConfigurationManager.AppSettings["QnaSubscriptionKey"];
 
         private readonly TelemetryClient _telemetry;
-
-
+        
         public QnaMakerKb()
         {
             _telemetry = new TelemetryClient();
@@ -30,11 +28,11 @@ namespace DVAESABot.QnAMaker
         // Ocp-Apim-Subscription-Key: {SubscriptionKey}
         // Content-Type: application/json
         // {"question":"hi"}
-        public async Task<QnaMakerResult> SearchFaqAsync(string question)
+        public async Task<QnaMakerResult> SearchFaqAsync(string question, string kbId)
         {
             var responseString = string.Empty;
 
-            var uri = new UriBuilder($"{qnaBaseUri}/knowledgebases/{this.KbId}/generateAnswer").Uri;
+            var uri = new UriBuilder($"{qnaBaseUri}/knowledgebases/{kbId}/generateAnswer").Uri;
 
             var postBody = $"{{\"question\": \"{question}\"}}";
 

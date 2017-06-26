@@ -167,6 +167,8 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\AzureSearchDialog.cs" />
+    <Compile Include="Dialogs\DialogHelper.cs" />
     <Compile Include="Dialogs\LuisMRCADialog.cs" />
     <Compile Include="Dialogs\QnAMRCADialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
@@ -180,6 +182,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="QnaMaker\KbId.cs" />
     <Compile Include="QnaMaker\QnaMaker.cs" />
     <Compile Include="QnaMaker\QnaMakerResult.cs" />
     <Compile Include="Search\FactSheetSearchClient.cs" />

@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using System;
+using System.Configuration;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
@@ -42,14 +43,25 @@ namespace DVAESABot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            await context.PostAsync("Great to hear! You can ask a question within this factsheet:");
+            string factsheetCode;
+            context.UserData.TryGetValue<string>("FactsheetCode", out factsheetCode);
+
+            await context.PostAsync($"Great to hear! You can ask a question within factsheet {factsheetCode}");
             context.Wait(MessageReceivedAsync);
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
             var message = await item;
-            var qnaResult = await _qnaMaker.SearchFaqAsync(message.Text);
+
+            string kbId;
+            context.UserData.TryGetValue<string>("KbId", out kbId);
+            if (String.IsNullOrEmpty(kbId))
+            {
+                kbId = ConfigurationManager.AppSettings["QnaKnowledgeBaseId"];
+            }
+
+            var qnaResult = await _qnaMaker.SearchFaqAsync(message.Text, kbId);
             string replyContent = "No good match found in the factsheet";
 
             if (qnaResult == null || qnaResult.Score <= 30 ||
