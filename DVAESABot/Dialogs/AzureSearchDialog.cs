@@ -30,20 +30,25 @@ namespace DVAESABot.Dialogs
 
             FactSheetSearchClient client = FactSheetSearchClient.CreateDefault();
             DocumentSearchResult<FactSheet> result = await client.GetTopMatchingFactsheets(userInput.Text, 3);
-            // TODO Restricting to MRCA currently
-            string mrcaFactsheet = null;
+            // Restricting to MRCA
+            //string mrcaFactsheet = null;
+            bool topResult = true;
 
             var message = "Factsheets that match:\n\n";
             foreach (var r in result.Results)
             {
-                if (r.Document.FactsheetId.Contains("MRC"))
+                //if (r.Document.FactsheetId.Contains("MRC"))
+                //{
+                //    mrcaFactsheet = r.Document.FactsheetId;
+                //}
+                if (topResult)
                 {
-                    mrcaFactsheet = r.Document.FactsheetId;
+                    DialogHelper.StoreKbDetails(context, r.Document.FactsheetId);
+                    topResult = false;
                 }
                 message += $"{r.Document.FactsheetId} ({r.Score})\n\n";
             }
-
-            DialogHelper.StoreKbDetails(context, mrcaFactsheet);
+            
             await PostResponseWithFeedback(context, message);
         }
 
