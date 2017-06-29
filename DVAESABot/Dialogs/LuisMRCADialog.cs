@@ -134,7 +134,7 @@ namespace DVAESABot.Dialogs
             {
                 if (launchQnA)
                 {
-                    context.Call(new QnAMRCADialog(), ResumeAfterQnA);
+                    context.Call(new QnAFactsheetDialog(), ResumeAfterQnA);
                 }
                 else
                 {
@@ -195,7 +195,7 @@ namespace DVAESABot.Dialogs
         // Helper method for posting a message with a standard feedback question
         private async Task PostResponseWithFeedback(IDialogContext context, string message)
         {
-            await DialogHelper.PostMessage(context, message);
+            await DialogHelper.PostMessageWithFeedback(context, message);
             context.Wait(FeedbackReceived);
         }
 
@@ -203,7 +203,7 @@ namespace DVAESABot.Dialogs
         private async Task ResumeAfterQnA(IDialogContext context, IAwaitable<string> result)
         {
             var resultFromQnA = await result;
-            await DialogHelper.PostMessage(context, resultFromQnA + "\n\n\n\n");
+            await DialogHelper.PostMessageWithFeedback(context, resultFromQnA + "\n\n\n\n");
             context.Wait(this.QnAFeedbackReceived);
         }
     }

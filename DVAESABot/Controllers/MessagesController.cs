@@ -13,6 +13,9 @@ namespace DVAESABot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        // TODO: Replace in future with LUIS
+        private static string[] _greetings = { "hi", "hello" };
+
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
@@ -21,10 +24,19 @@ namespace DVAESABot
         {
             if (activity.Type == ActivityTypes.Message)
             {
-                // Funnelling with LUIS - improved from user testing 1/6
-                //await Conversation.SendAsync(activity, () => new LuisMRCADialog());
-                // Funnelling with Azure Search - Stage 2
-                await Conversation.SendAsync(activity, () => new AzureSearchDialog());
+                if (_greetings.Contains(activity.Text, StringComparer.OrdinalIgnoreCase))
+                {
+                    var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    var replyMessage = activity.CreateReply("Hello!", "en");
+                    await connector.Conversations.ReplyToActivityAsync(replyMessage);
+                }
+                else
+                {
+                    // Funnelling with LUIS - improved from user testing 1/6
+                    //await Conversation.SendAsync(activity, () => new LuisMRCADialog());
+                    // Funnelling with Azure Search - Stage 2
+                    await Conversation.SendAsync(activity, () => new AzureSearchDialog());
+                }
             }
             else
             {
@@ -54,11 +66,11 @@ namespace DVAESABot
                     {
                         if (newMember.Id != message.Recipient.Id)
                         {
-                            var replyMessage = message.CreateReply("Hi, I am the DVA ESA chat bot.\n\nI can help you with MRCA related questions.\n\nTo start, just ask me a question or tell me about your situation.", "en");
+                            var replyMessage = message.CreateReply("Hello, I'm Dewey, DVA's virtual assistant.  I can help you with general veterans enquiries.  (You can view information about your privacy here.)\n\nWhat do you need?", "en");
                             connector.Conversations.ReplyToActivityAsync(replyMessage);
                         }
                     }
-                }   
+                }
             }
             else if (message.Type == ActivityTypes.ContactRelationUpdate)
             {
