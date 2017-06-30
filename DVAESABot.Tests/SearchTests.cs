@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DVAESABot.Search;
 using System.Diagnostics;
+using DVAESABot.Search;
 
 namespace DVAESABot.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class SearchTests
     {
         [TestMethod]
         public void RunSearchQuery()
