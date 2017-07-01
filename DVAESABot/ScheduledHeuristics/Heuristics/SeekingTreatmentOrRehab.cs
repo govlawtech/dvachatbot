@@ -1,9 +1,10 @@
 ﻿using System;
 using DVAESABot.Domain;
+using DVAESABot.Utilities;
 
-namespace DVAESABot.ScheduledHeuristics.Heauristics
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    class SeekingTreatmentOrRehab : IScheduledHeuristic
+    class SeekingTreatmentOrRehab : IScheduledHeuristic, IHaveDialog<bool>
     {
         public string Description => "Member seeking treatment or rehab, therefore limit to MRC, HSV and VVCS";
         public int Salience => 150;
@@ -27,5 +28,14 @@ namespace DVAESABot.ScheduledHeuristics.Heauristics
 
         };
         public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveAllCategoriesOtherThan("MRC", "HSV", "VVCS");
+        public IHaveDialog<bool> GetDialog()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyResult(bool result, ChatContext chatContext)
+        {
+            chatContext.User.SeekingTreatmentOrRehab = new Some<bool>(result);
+        }
     }
 }

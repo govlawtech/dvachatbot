@@ -1,10 +1,11 @@
 ﻿using System;
 using DVAESABot.Domain;
 using DVAESABot.Utilities;
+using Microsoft.Bot.Builder.Dialogs;
 
-namespace DVAESABot.ScheduledHeuristics.Heauristics
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    class MemberTypeHeuristic : IScheduledHeuristic
+    class MemberTypeHeuristic : IScheduledHeuristic, IHaveDialog<UserType>
     {
         public string Description => "Member Type";
 
@@ -41,5 +42,15 @@ namespace DVAESABot.ScheduledHeuristics.Heauristics
                 }
             }
         };
+
+        public IHaveDialog<UserType> GetDialog()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyResult(UserType result, ChatContext chatContext)
+        {
+            chatContext.User.UserType = new Some<UserType>(result);
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DVAESABot.Domain;
 using DVAESABot.ScheduledHeuristics;
-using DVAESABot.ScheduledHeuristics.Heauristics;
+using DVAESABot.ScheduledHeuristics.Heuristics;
 using DVAESABot.Search;
 using DVAESABot.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -201,13 +201,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="ScheduledHeuristics\Heauristics\ISSNotRelevant.cs" />
-    <Compile Include="ScheduledHeuristics\Heauristics\NoF111Deseal.cs" />
-    <Compile Include="ScheduledHeuristics\Heauristics\DisabilityPensionNotRelevant.cs" />
-    <Compile Include="ScheduledHeuristics\Heauristics\MemberTypeHeuristic.cs" />
-    <Compile Include="ScheduledHeuristics\Heauristics\SeekingTreatmentOrRehab.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\MemberTypeHeuristic.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\SeekingTreatmentOrRehab.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
-    <Compile Include="ScheduledHeuristics\IScheduledHeuristicDialog.cs" />
     <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />
     <Compile Include="ScheduledHeuristics\Scheduler.cs" />
     <Compile Include="Heuristics\EnlistBefore1July2004Heuristic.cs" />

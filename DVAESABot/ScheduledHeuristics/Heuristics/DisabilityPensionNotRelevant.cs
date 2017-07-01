@@ -1,10 +1,12 @@
 ﻿using System;
 using DVAESABot.Domain;
+using DVAESABot.Utilities;
+using Microsoft.Bot.Builder.Dialogs;
 using NodaTime;
 
-namespace DVAESABot.ScheduledHeuristics.Heauristics
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    class DisabilityPensionNotRelevant : IScheduledHeuristic
+    class DisabilityPensionNotRelevant : IScheduledHeuristic, IHaveDialog<LocalDate>
     {
         public string Description => "Member enlisted before 1 July 2004, therefore disability pension not relevant";
         public int Salience => 60;
@@ -28,5 +30,16 @@ namespace DVAESABot.ScheduledHeuristics.Heauristics
         };
 
         public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("DP");
+        public IHaveDialog<LocalDate> GetDialog()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ApplyResult(LocalDate result, ChatContext chatContext)
+        {
+            chatContext.User.EnlistmentDate = new Some<LocalDate>(result);
+        }
+
+        
     }
 }

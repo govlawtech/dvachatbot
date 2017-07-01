@@ -1,5 +1,7 @@
 ﻿using System;
 using DVAESABot.Domain;
+using DVAESABot.Utilities;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics
 {
@@ -10,4 +12,13 @@ namespace DVAESABot.ScheduledHeuristics
         Predicate<ChatContext> Condition { get; }
         Action<ChatContext> Action { get; }
     }
+
+    interface IHaveDialog<in TDialogResult>
+    {
+        IHaveDialog<TDialogResult> GetDialog();
+        
+        void ApplyResult(TDialogResult result, ChatContext chatContext);
+    }
+
+
 }

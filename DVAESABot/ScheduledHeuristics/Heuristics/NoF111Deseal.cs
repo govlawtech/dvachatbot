@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using DVAESABot.Domain;
 using NodaTime;
 
-namespace DVAESABot.ScheduledHeuristics.Heauristics
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
     class NoF111Deseal : IScheduledHeuristic
     {
