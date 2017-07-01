@@ -9,7 +9,7 @@ namespace DVAESABot.ScheduledHeuristics
     {
         // create heuristics rulebase
         // create dialogs for them
-
+        
         
             
         

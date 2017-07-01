@@ -30,7 +30,7 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
         };
 
         public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("DP");
-        public IHaveDialog<LocalDate> GetDialog()
+        public IDialog<LocalDate> GetDialog()
         {
             throw new NotImplementedException();
         }

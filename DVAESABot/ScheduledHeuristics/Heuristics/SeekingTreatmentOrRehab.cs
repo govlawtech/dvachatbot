@@ -1,6 +1,7 @@
 ﻿using System;
 using DVAESABot.Domain;
 using DVAESABot.Utilities;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
@@ -28,7 +29,7 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
 
         };
         public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveAllCategoriesOtherThan("MRC", "HSV", "VVCS");
-        public IHaveDialog<bool> GetDialog()
+        public IDialog<bool> GetDialog()
         {
             throw new NotImplementedException();
         }

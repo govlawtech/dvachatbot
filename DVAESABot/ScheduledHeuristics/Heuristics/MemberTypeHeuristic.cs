@@ -1,4 +1,5 @@
 ﻿using System;
+using DVAESABot.Dialogs;
 using DVAESABot.Domain;
 using DVAESABot.Utilities;
 using Microsoft.Bot.Builder.Dialogs;
@@ -43,9 +44,9 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
             }
         };
 
-        public IHaveDialog<UserType> GetDialog()
+        public IDialog<UserType> GetDialog()
         {
-            throw new NotImplementedException();
+            return new UserTypeDialog();
         }
 
         public void ApplyResult(UserType result, ChatContext chatContext)

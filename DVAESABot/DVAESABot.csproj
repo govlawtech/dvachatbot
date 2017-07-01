@@ -194,6 +194,7 @@
     <Compile Include="Dialogs\LuisMRCADialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\UserTypeDialog.cs" />
     <Compile Include="Domain\ChatContext.cs" />
     <Compile Include="Domain\FactSheet.cs" />
     <Compile Include="Domain\FactsheetShortlist.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\MemberTypeHeuristic.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\SeekingTreatmentOrRehab.cs" />
+    <Compile Include="ScheduledHeuristics\IHaveDialog.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
     <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />
     <Compile Include="ScheduledHeuristics\Scheduler.cs" />
