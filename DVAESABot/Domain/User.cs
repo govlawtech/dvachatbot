@@ -26,6 +26,7 @@ namespace DVAESABot.Domain
     {
        Member,
        DependentOnMember,
-       DependentOnDeceasedMember
+       DependentOnDeceasedMember,
+       Organisation
     }
 }

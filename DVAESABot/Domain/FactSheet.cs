@@ -22,6 +22,7 @@ namespace DVAESABot.Domain
         public string FactsheetId { get; set; }
 
         public string Purpose { get; set; }
-
+        
+        public IEnumerable<string> CuratedKeyWords { get; set; }
     }
 }
