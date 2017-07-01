@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DVAESABot.Domain;
 using DVAESABot.ScheduledHeuristics;
+using DVAESABot.ScheduledHeuristics.Heauristics;
 using DVAESABot.Search;
 using DVAESABot.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,24 +14,7 @@ namespace DVAESABot.Tests
     [TestClass]
     public class ScheduledHeuristicsTests
     {
-        [TestMethod]
-        public void BasicTest()
-        {
-            IList<IScheduledHeuristic> heuristics = new List<IScheduledHeuristic>() {new MrcaHeuristic()};
-            var c = new ChatContext();
-            Scheduler scheduler = new Scheduler(heuristics, c);
-            scheduler.Run();
-            Assert.IsTrue(c.User.IsMRCAEnlistee.Tag == OptionType.None);
-
-            c.User.EnlistmentDate = Option.Some(new LocalDate(2010, 1, 1));
-            c.User.UserType = Option.Some(UserType.Member);
-
-            scheduler.Run();
-            c.User.IsMRCAEnlistee.MatchSome(out bool shouldBeTrue);
-            Assert.IsTrue(shouldBeTrue);
-        }
-
-
+       
         [TestMethod]
         public void MemberTypeHeuristicTest()
         {
@@ -51,105 +35,7 @@ namespace DVAESABot.Tests
         }
     }
 
-    class MemberTypeHeuristic : IScheduledHeuristic
-    {
-        public string Description => "Member Type";
-
-        public int Salience => 200;
-
-        public Predicate<ChatContext> Condition => c => c.User.UserType.Tag == OptionType.Some;
-
-        public Action<ChatContext> Action => c =>
-        {
-            if (c.User.UserType.MatchSome(out UserType userType))
-            {
-                switch (userType)
-                {
-                    case UserType.Member:
-                    {
-                        c.FactsheetShortlist.RemoveCategories("GS","HIP");
-                        break;
-                    }
-                    case UserType.DependentOnDeceasedMember:
-                    {
-                        c.FactsheetShortlist.RemoveAllExceptWithKeyWords("Dependent","Defacto","Bereavement");
-                        break;
-                    }
-                    case UserType.DependentOnMember:
-                    {
-                        c.FactsheetShortlist.RemoveAllExceptWithKeyWords("Dependent", "Children");
-                        break;
-                    }
-                    case UserType.Organisation:
-                    {
-                        c.FactsheetShortlist.RemoveAllCategoriesOtherThan("HIP","GS","IP","FIP","DVA");
-                        break;
-                    }
-                }
-            }
-        };
-    }
-
-    class F111Deseal : IScheduledHeuristic
-    {
-        public string Description => "F111 deseal relevant";
-        public int Salience => 50;
-
-        public Predicate<ChatContext> Condition => c =>
-        {
-            if (c.User.UserType.MatchSome(out UserType userType))
-                if (userType == UserType.Member)
-                    if (c.User.EnlistmentDate.MatchSome(out LocalDate enlistDate))
-                        if (enlistDate.CompareTo(new LocalDate(2001, 1, 1)) < 0)
-                            return true;
-            return false;
-        };
-
-        public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveAllCategoriesOtherThan("F111");
-    }
-
-    class NoF111Deseal : IScheduledHeuristic
-    {
-        public string Description => "F111 deseal not relevant";
-        public int Salience => 51;
-
-        public Predicate<ChatContext> Condition => c =>
-        {
-            if (c.User.UserType.MatchSome(out UserType userType))
-                if (userType == UserType.Member)
-                    if (c.User.EnlistmentDate.MatchSome(out LocalDate enlistDate))
-                        if (enlistDate.CompareTo(new LocalDate(2001, 1, 1)) >= 0)
-                            return true;
-            return false;
-        };
-
-        public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("F111");
-    }
 
 
-
-    class MrcaHeuristic : IScheduledHeuristic
-    {
-        public string Description => "Post MRCA Enlistment";
-        public int Salience => 100;
-        public Predicate<ChatContext> Condition => c =>
-        {
-            if (c.User.UserType.MatchSome(out UserType userType))
-            {
-                if (userType == UserType.Member)
-                {
-                    if (c.User.EnlistmentDate.MatchSome(out LocalDate enlistDate))
-                    {
-                        return enlistDate.CompareTo(new LocalDate(2004,7,1)) >= 0;
-                    }
-                }
-            }
-            return false;
-        };  
-
-        public Action<ChatContext> Action => c =>
-        {
-            c.User.IsMRCAEnlistee = Option.Some(true);
-        };
-    }
+ 
 }

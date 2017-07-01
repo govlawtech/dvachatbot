@@ -35,13 +35,11 @@ namespace DVAESABot.Domain
 
         public void RemoveAllExceptWithKeyWords(params string[] keywords)
         {
-
             var cutDown = from doc in Shortlist
                 where doc.Document.CuratedKeyWords.Any(akw => keywords.ToList().Contains(akw))
                 select doc;
 
             Shortlist = cutDown.ToList();
-
         }
     }
 

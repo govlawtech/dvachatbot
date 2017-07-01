@@ -14,12 +14,12 @@ namespace DVAESABot.Domain
             UserType = Option.None<UserType>();
             EnlistmentDate = Option.None<LocalDate>();
             Transitioning = Option.None<bool>();
-            IsMRCAEnlistee = Option.None<bool>();
         }
         public Option<UserType> UserType { get; set; }
+        public Option<int> Age { get; set; }
         public Option<LocalDate> EnlistmentDate { get; set; }
         public Option<bool> Transitioning { get; set; }
-        public Option<bool> IsMRCAEnlistee { get; set; }
+        public Option<bool> SeekingTreatmentOrRehab { get; set; }
     }
 
     public enum UserType
