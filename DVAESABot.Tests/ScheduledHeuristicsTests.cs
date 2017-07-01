@@ -36,16 +36,18 @@ namespace DVAESABot.Tests
         {
              IList<IScheduledHeuristic> heuristics = new List<IScheduledHeuristic>() {new MemberTypeHeuristic()};
             var searchClient = new FactSheetSearchClient("3B8D7E200F249FC4C1CFA469799348F8", "dvafactsheets", "dvafactsheetsindex");
-            var searchResults = searchClient.GetTopMatchingFactsheets("Ive got mental health issues after deployment", 50);
+            var searchResults = searchClient
+                .GetTopMatchingFactsheets("Ive got mental health issues after deployment", 256).Result;
             var c = new ChatContext();
-            c.FactsheetShortlist = new FactsheetShortlist(searchResults.Result.Results);
+            c.FactsheetShortlist = new FactsheetShortlist(searchResults.Results);
             c.User.UserType = Option.Some(UserType.Member);
+            int firstRun = c.FactsheetShortlist.Shortlist.Count;
             Console.WriteLine("Number of shortlisted facsheets before heuristic run: " + c.FactsheetShortlist.Shortlist.Count);
             Scheduler scheduler = new Scheduler(heuristics, c);
             scheduler.Run();
-
+            int secondRun = c.FactsheetShortlist.Shortlist.Count;
             Console.WriteLine("Number of shortlisted facsheets after heuristic run: " + c.FactsheetShortlist.Shortlist.Count);
-            
+            Assert.IsTrue(secondRun < firstRun);
         }
     }
 
@@ -87,6 +89,44 @@ namespace DVAESABot.Tests
             }
         };
     }
+
+    class F111Deseal : IScheduledHeuristic
+    {
+        public string Description => "F111 deseal relevant";
+        public int Salience => 50;
+
+        public Predicate<ChatContext> Condition => c =>
+        {
+            if (c.User.UserType.MatchSome(out UserType userType))
+                if (userType == UserType.Member)
+                    if (c.User.EnlistmentDate.MatchSome(out LocalDate enlistDate))
+                        if (enlistDate.CompareTo(new LocalDate(2001, 1, 1)) < 0)
+                            return true;
+            return false;
+        };
+
+        public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveAllCategoriesOtherThan("F111");
+    }
+
+    class NoF111Deseal : IScheduledHeuristic
+    {
+        public string Description => "F111 deseal not relevant";
+        public int Salience => 51;
+
+        public Predicate<ChatContext> Condition => c =>
+        {
+            if (c.User.UserType.MatchSome(out UserType userType))
+                if (userType == UserType.Member)
+                    if (c.User.EnlistmentDate.MatchSome(out LocalDate enlistDate))
+                        if (enlistDate.CompareTo(new LocalDate(2001, 1, 1)) >= 0)
+                            return true;
+            return false;
+        };
+
+        public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("F111");
+    }
+
+
 
     class MrcaHeuristic : IScheduledHeuristic
     {

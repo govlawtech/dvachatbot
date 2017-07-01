@@ -43,15 +43,16 @@ namespace DVAESABot.Domain
             Shortlist = cutDown.ToList();
 
         }
-
-        
     }
 
     public static class FactsheetExtensions
     {
         public static bool IsCategory(this FactSheet factsheet, string categoryCode)
         {
-            return Regex.IsMatch(factsheet.FactsheetId, categoryCode);
+            var factsheetCode = Regex.Match(factsheet.FactsheetId, "\\s[A-Z]+[0-9]+\\s");
+            if (!factsheetCode.Success) return false;
+
+            return factsheetCode.Value.Contains(categoryCode);
         }
     }
 }
