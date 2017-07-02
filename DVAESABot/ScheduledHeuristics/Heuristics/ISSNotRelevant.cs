@@ -10,22 +10,14 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
 
         public Predicate<ChatContext> Condition => c =>
         {
-            if (c.User.UserType.MatchSome(out UserType userType))
-            {
-                if (userType == UserType.Member || userType == UserType.DependentOnDeceasedMember ||
-                    userType == UserType.DependentOnMember)
-                {
-                    if (c.User.Age.MatchSome(out int age))
-                    {
-                        if (age > 67) return true;
-
-                    }
-                }
-
-            }
-            return false;
+            if (!c.User.UserType.MatchSome(out UserType userType)) return false;
+            if (userType != UserType.Member && userType != UserType.DependentOnDeceasedMember &&
+                userType != UserType.DependentOnMember) return false;
+            if (!c.User.Age.MatchSome(out int age)) return false;
+            return age > 67;
         };
+    
 
-        public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("ISS");
+    public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("ISS");
     }
 }
