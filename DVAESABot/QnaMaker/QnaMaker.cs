@@ -42,15 +42,7 @@ namespace DVAESABot.QnAMaker
                 client.Headers.Add("Content-Type", "application/json");
                 client.Headers.Add("Ocp-Apim-Subscription-Key", this.SubscriptionKey);
 
-                try
-                {
-                    responseString = await client.UploadStringTaskAsync(uri, postBody);
-
-                }
-                catch (WebException we)
-                {
-                    throw;
-                }
+                 responseString = await client.UploadStringTaskAsync(uri, postBody);
             }
 
             var result = ConvertResponseFromJson(responseString);
