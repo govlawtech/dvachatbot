@@ -55,13 +55,19 @@ namespace DVAESABot
                 {
                     var connector = new ConnectorClient(new Uri(message.ServiceUrl));
                     var botId = WebConfigurationManager.AppSettings["BotId"];
-                    if (update.MembersAdded.Any(ma => ma.Name == botId))
+                    if (update.MembersAdded.Any(ma => ma.Name == botId || ma.Name == "Bot")) // "Bot" is for emulator
                     {
-                        var replyMessage =
+                        var greeting =
                             message.CreateReply(
                                 "Hello, I'm Dewey, DVA's virtual assistant.  I can help you with general veterans enquiries.  (<a href='https://dvachatbot.azurewebsites.net/privacy.html'>Privacy information</a>.)",
                                 "en");
-                        connector.Conversations.ReplyToActivityAsync(replyMessage);
+                        connector.Conversations.ReplyToActivityAsync(greeting);
+
+                        Task.Delay(3000).Wait();
+
+                        var instruction =  message.CreateReply("Please tell me in detail the information you are after.");
+                        connector.Conversations.ReplyToActivityAsync(instruction);
+
                     }
                 }
             }
