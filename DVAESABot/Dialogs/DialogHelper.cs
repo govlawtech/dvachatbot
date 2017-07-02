@@ -23,7 +23,7 @@ namespace DVAESABot.Dialogs
 
         public static async Task PostMessageWithFeedback(IDialogContext context, string message)
         {
-            await PostMessage(context, message + "Was this answer useful?");
+            await PostMessage(context, message + "\n\n\n\nWas this answer useful?");
         }
 
         public static async Task PostMessage(IDialogContext context, string message)
