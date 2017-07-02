@@ -83,7 +83,7 @@ namespace DVAESABot.Dialogs
                         count++;
                         card.Actions.Add(new SubmitAction()
                         {
-                            Title = $"{DialogHelper.ExtractFactsheetTitleFromIntent(ref factsheetKey)})",
+                            Title = $"{DialogHelper.GetWrappedFactsheetTitle(factsheetKey,25)}",
                             Data = $"{factsheetKey}"
                         });
                     }

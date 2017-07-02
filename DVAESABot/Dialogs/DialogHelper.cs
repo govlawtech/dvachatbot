@@ -4,6 +4,7 @@ using Microsoft.Bot.Connector;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DVAESABot.Dialogs
@@ -69,15 +70,23 @@ namespace DVAESABot.Dialogs
         // Parses the Factsheet Code and Knowledge Base ID from the intentName and stores it for the session
         public static void StoreKbDetails(IDialogContext context, string intentName)
         {
-            context.UserData.SetValue<string>(FACTSHEET_NAME, ExtractFactsheetTitleFromIntent(ref intentName));
+            context.UserData.SetValue<string>(FACTSHEET_NAME, ExtractFactsheetTitleFromFactSheetTitle(ref intentName));
             context.UserData.SetValue<string>(KB_ID, GetKbIdFromFactsheetCode(_ExtractFactsheetCodeFromIntent(ref intentName)));
         }
 
 
         // Helper method for extracting 'Factsheet XXXNN - ' and just return the text after the '-'
-        public static string ExtractFactsheetTitleFromIntent(ref string intentName)
+        public static string ExtractFactsheetTitleFromFactSheetTitle(ref string factSheetTitle)
         {
-            return intentName.Substring(intentName.IndexOf(" - ") + 3);
+            return factSheetTitle.Substring(factSheetTitle.IndexOf(" - ") + 3);
+        }
+
+        public static string GetWrappedFactsheetTitle(string fullFactSheetTitle, int cols)
+        {
+            var shortTitle = ExtractFactsheetTitleFromFactSheetTitle(ref fullFactSheetTitle);
+            var asWords = shortTitle.Split(' ');
+            var wrapped = Wrap(asWords, cols);
+            return String.Join(" ", wrapped);
         }
 
         // Helper method for extracting the Factsheet Code from the intentName
@@ -105,6 +114,40 @@ namespace DVAESABot.Dialogs
             {
                 // Default one with all questions
                 return ConfigurationManager.AppSettings["QnaKnowledgeBaseId"];
+            }
+        }
+
+        private static string Wrap(string text, int lineWidth)
+        {
+            return string.Join(string.Empty,
+                Wrap(
+                    text.Split(new char[0],
+                        StringSplitOptions
+                            .RemoveEmptyEntries),
+                    lineWidth));
+        }
+
+        public static IEnumerable<string> Wrap(IEnumerable<string> words,
+            int lineWidth)
+        {
+            var currentWidth = 0;
+            foreach (var word in words)
+            {
+                if (currentWidth != 0)
+                {
+                    if (currentWidth + word.Length < lineWidth)
+                    {
+                        currentWidth++;
+                        yield return " ";
+                    }
+                    else
+                    {
+                        currentWidth = 0;
+                        yield return Environment.NewLine;
+                    }
+                }
+                currentWidth += word.Length;
+                yield return word;
             }
         }
     }
