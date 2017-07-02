@@ -20,7 +20,7 @@ namespace DVAESABot.Dialogs
     {
         // TODO Consider https://docs.microsoft.com/en-us/bot-framework/dotnet/bot-builder-dotnet-search-azure
 
-        private const double MIN_SCORE = 0.8;
+        private const double MIN_SCORE = 0.6;
         private const int RESULTS_TO_DISPLAY = 3;
         private const string NOT_INTERESTED = "not-interested";
         private const string HEURISTIC_HISTORY = "HeuristicHistory";
@@ -48,7 +48,7 @@ namespace DVAESABot.Dialogs
             else if (result.Results.First().Score < MIN_SCORE)
             {
                 // TODO Get exact wording
-                await context.PostAsync($"I am not confident about answering your question accurately.\n\n\n\nIs there anything else that you need? (debug: {result.Results.First().Score})");
+                await context.PostAsync($"I am not confident about answering your question accurately.\n\n\n\nIs there anything else that you need? ");
                 context.Wait(MessageReceived);
             }
             else
@@ -83,7 +83,7 @@ namespace DVAESABot.Dialogs
                         count++;
                         card.Actions.Add(new SubmitAction()
                         {
-                            Title = $"{DialogHelper.ExtractFactsheetTitleFromIntent(ref factsheetKey)} (debug: {r.Score})",
+                            Title = $"{DialogHelper.ExtractFactsheetTitleFromIntent(ref factsheetKey)})",
                             Data = $"{factsheetKey}"
                         });
                     }
