@@ -55,7 +55,7 @@ namespace DVAESABot
                 {
                     var connector = new ConnectorClient(new Uri(message.ServiceUrl));
                     var botId = WebConfigurationManager.AppSettings["BotId"];
-                    if (update.MembersAdded.Any(ma => ma.Id == botId))
+                    if (update.MembersAdded.Any(ma => ma.Name == botId))
                     {
                         var replyMessage =
                             message.CreateReply(
