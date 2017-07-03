@@ -61,13 +61,14 @@ namespace DVAESABot
                             message.CreateReply(
                                 "Hello, I'm Dewey, DVA's virtual assistant.  I can help you with general veterans enquiries.  (<a href='https://dvachatbot.azurewebsites.net/privacy.html'>Privacy information</a>.)",
                                 "en");
-                        connector.Conversations.ReplyToActivityAsync(greeting);
-
-                        Task.Delay(3000).Wait();
-
-                        var instruction =  message.CreateReply("Please tell me in detail the information you are after.");
-                        connector.Conversations.ReplyToActivityAsync(instruction);
-
+                        connector.Conversations.ReplyToActivityAsync(greeting)
+                            .ContinueWith(task => Task.Delay(2000).Wait())
+                            .ContinueWith(task =>
+                            {
+                                var instruction =
+                                    message.CreateReply("Please tell me in detail the information you are after.");
+                                connector.Conversations.ReplyToActivityAsync(instruction);
+                            });
                     }
                 }
             }
