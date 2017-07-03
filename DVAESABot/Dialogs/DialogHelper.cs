@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using Chronic.Tags.Repeaters;
 
 namespace DVAESABot.Dialogs
 {
@@ -111,8 +112,7 @@ namespace DVAESABot.Dialogs
             }
             else
             {
-                // Default one with all questions
-                return ConfigurationManager.AppSettings["QnaKnowledgeBaseId"];
+                throw new ArgumentException($"No QnA KB id for factsheet code: " + factsheetCode);
             }
         }
 
