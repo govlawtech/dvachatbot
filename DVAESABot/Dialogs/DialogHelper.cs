@@ -74,7 +74,6 @@ namespace DVAESABot.Dialogs
             context.UserData.SetValue<string>(KB_ID, GetKbIdFromFactsheetCode(_ExtractFactsheetCodeFromIntent(ref intentName)));
         }
 
-
         // Helper method for extracting 'Factsheet XXXNN - ' and just return the text after the '-'
         public static string ExtractFactsheetTitleFromFactSheetTitle(ref string factSheetTitle)
         {
