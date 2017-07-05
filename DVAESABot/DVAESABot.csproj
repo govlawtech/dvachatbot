@@ -121,6 +121,7 @@
     <Reference Include="Microsoft.Spatial, Version=7.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Spatial.7.2.0\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -190,6 +191,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AzureSearchDialog.cs" />
+    <Compile Include="Dialogs\DeadEndDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
     <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
     <Compile Include="Dialogs\LuisMRCADialog.cs" />
@@ -199,10 +201,14 @@
     <Compile Include="Domain\ChatContext.cs" />
     <Compile Include="Domain\FactSheet.cs" />
     <Compile Include="Domain\FactsheetShortlist.cs" />
+    <Compile Include="Domain\FactSheetWithScore.cs" />
+    <Compile Include="Domain\Selections.cs" />
     <Compile Include="Domain\User.cs" />
+    <Compile Include="Exceptions\BotException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="GlobalMessageHandlersBotModule.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
@@ -225,6 +231,7 @@
     <Compile Include="QnaMaker\KbId.cs" />
     <Compile Include="QnaMaker\QnaMaker.cs" />
     <Compile Include="QnaMaker\QnaMakerResult.cs" />
+    <Compile Include="Scorables\FeedbackScorable.cs" />
     <Compile Include="Scorables\ResetScorable.cs" />
     <Compile Include="Search\FactSheetSearchClient.cs" />
     <Compile Include="Utilities\AppInsightsActivityLogger.cs" />
@@ -245,6 +252,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="PrivatePasswordsAndKeysNotToBePutInSourceControl.config" />
     <None Include="Properties\PublishProfiles\dvachatbot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\dvachatbot - Web Deploy.pubxml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
@@ -252,6 +260,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="tsconfig.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

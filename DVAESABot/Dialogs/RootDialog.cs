@@ -1,32 +1,38 @@
-﻿using System;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
+using DVAESABot.Domain;
 using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Connector;
 
 namespace DVAESABot.Dialogs
 {
     [Serializable]
     public class RootDialog : IDialog<object>
     {
-        public Task StartAsync(IDialogContext context)
+        public async Task StartAsync(IDialogContext context)
         {
-
-            context.Wait(MessageReceivedAsync);
-
-            return Task.CompletedTask;
+            context.UserData.SetValue(typeof(ChatContext).Name, ChatContext.CreateEmpty());
+            context.Call(new AzureSearchDialog(), ResumeAfterFactsheetChosen);
+        }
+        private async Task ResumeAfterFactsheetChosen(IDialogContext context, IAwaitable<string> result)
+        {
+            var chosenFactSheetTitle = await result;
+            if (context.UserData.TryGetValue(typeof(ChatContext).Name,out ChatContext cc))
+            {
+                var factsheet =
+                    cc.FactsheetShortlist.FirstOrDefault(f => f.FactSheet.FactsheetId == chosenFactSheetTitle);
+                if (factsheet != null)
+                {
+                    var url = factsheet.FactSheet.Url;
+                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle,url), LandingPad);
+                }
+            }
         }
 
-        private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<object> result)
+        private async Task LandingPad(IDialogContext context, IAwaitable<string> result)
         {
-            var activity = await result as Activity;
-
-            // calculate something for us to return
-            int length = (activity.Text ?? string.Empty).Length;
-
-            // return our reply to the user
-            await context.PostAsync($"You sent {activity.Text} which was {length} characters");
-
-            context.Wait(MessageReceivedAsync);
+            context.Call(new AzureSearchDialog(), ResumeAfterFactsheetChosen);
         }
+     
     }
 }

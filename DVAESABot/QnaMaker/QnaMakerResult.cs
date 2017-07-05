@@ -10,17 +10,20 @@ namespace DVAESABot.QnAMaker
 
     public class QnaMakerResult
     {
-        /// <summary>
-        /// The top answer found in the QnA Maker Service.
-        /// </summary>
+        [JsonProperty(PropertyName = "answers")]
+        public List<AnswerObject> Answers { get; set; }
+    }
+
+    public class AnswerObject
+    {
         [JsonProperty(PropertyName = "answer")]
         public string Answer { get; set; }
 
-        /// <summary>
-        /// The score in range [0, 100] corresponding to the top answer found in the QnA Maker Service.
-        /// </summary>
+        [JsonProperty(PropertyName = "questions")]
+        public List<string> Questions { get; set; }
+
         [JsonProperty(PropertyName = "score")]
         public double Score { get; set; }
     }
-
+    
 }

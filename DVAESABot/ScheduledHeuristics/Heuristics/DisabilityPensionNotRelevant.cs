@@ -13,23 +13,17 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
 
         public Predicate<ChatContext> Condition => c =>
         {
-            if (c.User.UserType.MatchSome(out UserType userType))
+            if (c.User.UserType == UserType.Member)
             {
-                if (userType == UserType.Member)
+                if (c.User.EnlistmentDate?.CompareTo(new LocalDate(2004, 7, 1)) >= 0)
                 {
-                    if (c.User.EnlistmentDate.MatchSome(out LocalDate enlistDate))
-                    {
-                        if (enlistDate.CompareTo(new LocalDate(2004, 7, 1)) >= 0)
-                        {
-                            return true;
-                        }
-                    }
+                    return true;
                 }
             }
             return false;
         };
 
-        public Action<ChatContext> Action => c => c.FactsheetShortlist.RemoveCategories("DP");
+        public Action<ChatContext> Action => c => c.FactsheetShortlist = c.FactsheetShortlist.RemoveCategories("DP");
         public IDialog<LocalDate> GetDialog()
         {
             throw new NotImplementedException();
@@ -37,7 +31,7 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
 
         public void ApplyResult(LocalDate result, ChatContext chatContext)
         {
-            chatContext.User.EnlistmentDate = new Some<LocalDate>(result);
+            chatContext.User.EnlistmentDate = result;
         }
 
         

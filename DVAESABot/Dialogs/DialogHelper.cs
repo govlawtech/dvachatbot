@@ -49,7 +49,7 @@ namespace DVAESABot.Dialogs
         // Parses the Factsheet Code from the intentName, and shortists it for this user
         public static void AddFactsheetCodeToShortlist(IDialogContext context, string intentName)
         {
-            string factsheetCode = _ExtractFactsheetCodeFromIntent(ref intentName);
+            string factsheetCode = ExtractFactsheetCodeFromFactSheeTitle(intentName);
 
             List<string> shortlist = context.UserData.GetValueOrDefault<List<string>>(SHORTLISTED_FACTSHEETS, new List<string>());
             shortlist.Add(factsheetCode);
@@ -71,34 +71,33 @@ namespace DVAESABot.Dialogs
         // Parses the Factsheet Code and Knowledge Base ID from the intentName and stores it for the session
         public static void StoreKbDetails(IDialogContext context, string intentName)
         {
-            context.UserData.SetValue<string>(FACTSHEET_NAME, ExtractFactsheetTitleFromFactSheetTitle(ref intentName));
-            context.UserData.SetValue<string>(KB_ID, GetKbIdFromFactsheetCode(_ExtractFactsheetCodeFromIntent(ref intentName)));
+            context.UserData.SetValue<string>(FACTSHEET_NAME, ExtractTopicFromFactSheetTitle(intentName));
+            context.UserData.SetValue<string>(KB_ID, GetKbIdFromFactsheetCode(ExtractFactsheetCodeFromFactSheeTitle(intentName)));
         }
 
         // Helper method for extracting 'Factsheet XXXNN - ' and just return the text after the '-'
-        public static string ExtractFactsheetTitleFromFactSheetTitle(ref string factSheetTitle)
+        public static string ExtractTopicFromFactSheetTitle(string factSheetTitle)
         {
             return factSheetTitle.Substring(factSheetTitle.IndexOf(" - ") + 3);
         }
 
         public static string GetWrappedFactsheetTitle(string fullFactSheetTitle, int cols)
         {
-            var shortTitle = ExtractFactsheetTitleFromFactSheetTitle(ref fullFactSheetTitle);
-            var asWords = shortTitle.Split(' ');
-            var wrapped = Wrap(asWords, cols);
+            var shortTitle = ExtractTopicFromFactSheetTitle(fullFactSheetTitle);
+            var wrapped = Wrap(shortTitle, cols);
             return String.Join(" ", wrapped);
         }
 
         // Helper method for extracting the Factsheet Code from the intentName
-        private static string _ExtractFactsheetCodeFromIntent(ref string intentName)
+        public static string ExtractFactsheetCodeFromFactSheeTitle(string factSheetTitle)
         {
             string factsheetCode = null;
-            if (intentName.StartsWith("factsheet", StringComparison.OrdinalIgnoreCase))
+            if (factSheetTitle.StartsWith("factsheet", StringComparison.OrdinalIgnoreCase))
             {
                 // Comes from Azure Search, e.g. "Factsheet MRC04 - ...."
-                intentName = intentName.Substring(intentName.IndexOf(" ") + 1);
+                factSheetTitle = factSheetTitle.Substring(factSheetTitle.IndexOf(" ") + 1);
             }
-            factsheetCode = intentName.Substring(0, intentName.IndexOf(" "));
+            factsheetCode = factSheetTitle.Substring(0, factSheetTitle.IndexOf(" "));
 
             return factsheetCode;
         }
@@ -116,7 +115,7 @@ namespace DVAESABot.Dialogs
             }
         }
 
-        private static string Wrap(string text, int lineWidth)
+        public static string Wrap(string text, int lineWidth)
         {
             return string.Join(string.Empty,
                 Wrap(

@@ -6,22 +6,30 @@ using Microsoft.Azure.Search.Models;
 
 namespace DVAESABot.Domain
 {
+    [Serializable]
+    [SerializePropertyNamesAsCamelCase]
     public class ChatContext
     {
-        public ChatContext(User user, FactsheetShortlist factsheetShortlist)
+        public ChatContext()
+        {
+            
+        }
+
+        public static ChatContext CreateEmpty()
+        {
+            return new ChatContext(new User(), new List<FactSheetWithScore>(),new Selections());
+        }
+        
+        public ChatContext(User user, List<FactSheetWithScore> factsheetShortlist, Selections selections)
         {
             User = user;
             FactsheetShortlist = factsheetShortlist;
+            Selections = selections;
         }
-
-        public ChatContext()
-        {
-            User = new User();
-            FactsheetShortlist = new FactsheetShortlist(new List<SearchResult<FactSheet>>());
-        }
-
+        
         public User User { get; set; }
-        public FactsheetShortlist FactsheetShortlist { get; set; }
+        public List<FactSheetWithScore> FactsheetShortlist { get; set; }
+        public Selections Selections { get; set; }
 
     }
 }

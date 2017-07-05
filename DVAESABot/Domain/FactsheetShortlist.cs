@@ -7,39 +7,35 @@ using Microsoft.Azure.Search.Models;
 
 namespace DVAESABot.Domain
 {
-    public class FactsheetShortlist
+   
+    public static class FactsheetShortlistExensions
     {
-        public FactsheetShortlist(IList<SearchResult<FactSheet>> initial)
+     
+        public static List<FactSheetWithScore> RemoveAllCategoriesOtherThan(this List<FactSheetWithScore> factSheetWithScores, params string[] categoryCodes)
         {
-            Shortlist = initial;
-        }
-        public IList<SearchResult<FactSheet>> Shortlist { get; private set; }
-
-        public void RemoveAllCategoriesOtherThan(params string[] categoryCodes)
-        {
-            var cutDownList = from doc in Shortlist
-                where categoryCodes.ToList().Any(cc => doc.Document.IsCategory(cc))
+            var cutDownList = from doc in factSheetWithScores
+                where categoryCodes.ToList().Any(cc => doc.FactSheet.IsCategory(cc))
                 select doc;
 
-            Shortlist = cutDownList.ToList();
+            return cutDownList.ToList();
         }
 
-        public void RemoveCategories(params string[] categoryCodes)
+        public static List<FactSheetWithScore> RemoveCategories(this List<FactSheetWithScore> factSheetWithScores, params string[] categoryCodes)
         {
-            var cutDown = from doc in Shortlist
-                where !categoryCodes.ToList().Any(cc => doc.Document.IsCategory(cc))
+            var cutDown = from doc in factSheetWithScores
+                where !categoryCodes.ToList().Any(cc => doc.FactSheet.IsCategory(cc))
                 select doc;
-            
-            Shortlist = cutDown.ToList();
+
+            return cutDown.ToList();
         }
 
-        public void RemoveAllExceptWithKeyWords(params string[] keywords)
+        public static List<FactSheetWithScore> RemoveAllExceptWithKeyWords(this List<FactSheetWithScore> factSheetWithScores, params string[] keywords)
         {
-            var cutDown = from doc in Shortlist
-                where doc.Document.CuratedKeyWords.Any(akw => keywords.ToList().Contains(akw))
+            var cutDown = from doc in factSheetWithScores
+                where doc.FactSheet.CuratedKeyWords.Any(akw => keywords.ToList().Contains(akw))
                 select doc;
 
-            Shortlist = cutDown.ToList();
+            return cutDown.ToList();
         }
     }
 

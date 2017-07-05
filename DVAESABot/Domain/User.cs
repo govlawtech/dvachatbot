@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DVAESABot.Utilities;
+using Microsoft.Azure.Search.Models;
 using NodaTime;
 
 namespace DVAESABot.Domain
 {
+    [Serializable]
+    [SerializePropertyNamesAsCamelCase]
     public class User
     {
         public User()
         {
-            UserType = Option.None<UserType>();
-            EnlistmentDate = Option.None<LocalDate>();
-            Transitioning = Option.None<bool>();
+            
         }
-        public Option<UserType> UserType { get; set; }
-        public Option<int> Age { get; set; }
-        public Option<LocalDate> EnlistmentDate { get; set; }
-        public Option<bool> Transitioning { get; set; }
-        public Option<bool> SeekingTreatmentOrRehab { get; set; }
+
+        public UserType? UserType { get; set; }
+        public int? Age { get; set; }
+        public LocalDate? EnlistmentDate { get; set; }
+        public bool? Transitioning { get; set; }
+        public bool? SeekingTreatmentOrRehab { get; set; }
     }
 
+    [Serializable]
     public enum UserType
     {
        Member,

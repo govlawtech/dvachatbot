@@ -14,9 +14,6 @@ namespace DVAESABot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        // TODO: Replace in future with LUIS
-        private static readonly string[] _greetings = {"hi", "hello"};
-
         /// <summary>
         ///     POST: api/Messages
         ///     Receive a message from a user and reply to it
@@ -24,19 +21,9 @@ namespace DVAESABot
         public async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
             if (activity.Type == ActivityTypes.Message)
-                if (_greetings.Contains(activity.Text, StringComparer.OrdinalIgnoreCase))
-                {
-                    var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                    var replyMessage = activity.CreateReply("Hello!", "en");
-                    await connector.Conversations.ReplyToActivityAsync(replyMessage);
-                }
-                else
-                {
-                    // Funnelling with LUIS - improved from user testing 1/6
-                    //await Conversation.SendAsync(activity, () => new LuisMRCADialog());
-                    // Funnelling with Azure Search - Stage 2
-                    await Conversation.SendAsync(activity, () => new AzureSearchDialog());
-                }
+
+                await Conversation.SendAsync(activity, () => new RootDialog());
+
             else
                 HandleSystemMessage(activity);
             var response = Request.CreateResponse(HttpStatusCode.OK);
@@ -66,7 +53,8 @@ namespace DVAESABot
                             .ContinueWith(task =>
                             {
                                 var instruction =
-                                    message.CreateReply("Please tell me in detail the information you are after.");
+                                    message.CreateReply(
+                                        "Please describe the <b>topic</b> you are interested in.");
                                 connector.Conversations.ReplyToActivityAsync(instruction);
                             });
                     }

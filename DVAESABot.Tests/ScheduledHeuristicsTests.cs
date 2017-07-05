@@ -22,15 +22,15 @@ namespace DVAESABot.Tests
             var searchClient = new FactSheetSearchClient("3B8D7E200F249FC4C1CFA469799348F8", "dvafactsheets", "dvafactsheetsindex");
             var searchResults = searchClient
                 .GetTopMatchingFactsheets("Ive got mental health issues after deployment", 256).Result;
-            var c = new ChatContext();
-            c.FactsheetShortlist = new FactsheetShortlist(searchResults.Results);
-            c.User.UserType = Option.Some(UserType.Member);
-            int firstRun = c.FactsheetShortlist.Shortlist.Count;
-            Console.WriteLine("Number of shortlisted facsheets before heuristic run: " + c.FactsheetShortlist.Shortlist.Count);
+            var c = ChatContext.CreateEmpty();
+            c.FactsheetShortlist = searchResults.Results.Select(r => new FactSheetWithScore(r)).ToList();
+            c.User.UserType = UserType.Member;
+            int firstRun = c.FactsheetShortlist.Count;
+            Console.WriteLine("Number of shortlisted facsheets before heuristic run: " + c.FactsheetShortlist.Count);
             Scheduler scheduler = new Scheduler(heuristics, c);
             scheduler.Run();
-            int secondRun = c.FactsheetShortlist.Shortlist.Count;
-            Console.WriteLine("Number of shortlisted facsheets after heuristic run: " + c.FactsheetShortlist.Shortlist.Count);
+            int secondRun = c.FactsheetShortlist.Count;
+            Console.WriteLine("Number of shortlisted facsheets after heuristic run: " + c.FactsheetShortlist.Count);
             Assert.IsTrue(secondRun < firstRun);
         }
     }
