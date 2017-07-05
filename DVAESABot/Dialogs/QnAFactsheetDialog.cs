@@ -100,7 +100,7 @@ namespace DVAESABot.Dialogs
             if (qnaResult == null || !qnaResult.Answers.Any() ||
                 qnaResult.Answers.First().Answer == "No good match found in the KB")
             {
-                replyContent = _failureMessagesSelection[_random.Next(0, _failureMessagesSelection.Count - 1)];
+                replyContent = _failureMessagesSelection[_random.Next(0, _failureMessagesSelection.Count)];
                 await context.PostAsync(replyContent);
             }
             else
