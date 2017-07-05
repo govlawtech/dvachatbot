@@ -252,7 +252,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="PrivatePasswordsAndKeysNotToBePutInSourceControl.config" />
+    <None Include="PrivatePasswordsAndKeysNotToBePutInSourceControl.config" />
     <None Include="Properties\PublishProfiles\dvachatbot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\dvachatbot - Web Deploy.pubxml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
