@@ -76,7 +76,7 @@ namespace DVAESABot.Dialogs
             else
             {
                 await context.SayAsync(
-                    $"Try <a href=\"{_factSheetUrl}\">this factsheet on DVA's website.</a>");
+                    $"Try <a href=\"{_factSheetUrl}\" target=\"_blank\">this factsheet</a> on DVA's website.");
                 context.Done("Done");
 
             }
