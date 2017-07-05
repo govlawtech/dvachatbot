@@ -31,8 +31,11 @@ namespace DVAESABot.Dialogs
 
         [NonSerialized] private QnaMakerKb _qnaMaker;
 
+        private Random _random;
+
         public QnAFactsheetDialog()
         {
+               _random = new Random();
         }
 
         public QnAFactsheetDialog(string factSheetTitle, string factSheetUrl)
@@ -97,8 +100,7 @@ namespace DVAESABot.Dialogs
             if (qnaResult == null || !qnaResult.Answers.Any() ||
                 qnaResult.Answers.First().Answer == "No good match found in the KB")
             {
-                var random = new Random();
-                replyContent = _failureMessagesSelection[random.Next(0, _failureMessagesSelection.Count - 1)];
+                replyContent = _failureMessagesSelection[_random.Next(0, _failureMessagesSelection.Count - 1)];
                 await context.PostAsync(replyContent);
             }
             else
