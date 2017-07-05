@@ -1,15 +1,14 @@
 ﻿using System;
 using DVAESABot.Domain;
-using DVAESABot.Utilities;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace DVAESABot.ScheduledHeuristics.Heuristics
+namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
 {
-    internal class SeekingTreatmentOrRehab : IScheduledHeuristic, IHaveDialog<bool>
+    internal class SeekingTreatmentOrQuestion : IScheduledHeuristic, IHaveDialog<bool>
     {
         public IDialog<bool> GetDialog()
         {
-            throw new NotImplementedException();
+           throw new NotImplementedException();
         }
 
         public void ApplyResult(bool result, ChatContext chatContext)

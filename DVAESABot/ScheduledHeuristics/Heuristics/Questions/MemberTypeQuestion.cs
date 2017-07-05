@@ -1,12 +1,11 @@
 ﻿using System;
 using DVAESABot.Dialogs;
 using DVAESABot.Domain;
-using DVAESABot.Utilities;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace DVAESABot.ScheduledHeuristics.Heuristics
+namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
 {
-    class MemberTypeHeuristic : IScheduledHeuristic, IHaveDialog<UserType>
+    class MemberTypeQuestion : IScheduledHeuristic, IHaveDialog<UserType>
     {
         public string Description => "Member Type";
 

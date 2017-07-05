@@ -1,1 +1,14 @@
-﻿{ "compilerOptions": { "types": [] } }
+{
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es5",
+    { "types": [] }
+  },
+  "exclude": [
+    "node_modules",
+    "wwwroot",
+  ]
+}

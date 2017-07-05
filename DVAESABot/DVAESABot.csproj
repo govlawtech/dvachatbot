@@ -3,6 +3,7 @@
   <Import Project="..\packages\Microsoft.Net.Compilers.2.2.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.2.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>
@@ -191,13 +192,15 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AzureSearchDialog.cs" />
-    <Compile Include="Dialogs\DeadEndDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
+    <Compile Include="Dialogs\GetDateDialog.cs" />
     <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
     <Compile Include="Dialogs\LuisMRCADialog.cs" />
+    <Compile Include="Dialogs\NumberDialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\UserTypeDialog.cs" />
+    <Compile Include="Dialogs\YesNoDialog.cs" />
     <Compile Include="Domain\ChatContext.cs" />
     <Compile Include="Domain\FactSheet.cs" />
     <Compile Include="Domain\FactsheetShortlist.cs" />
@@ -212,8 +215,8 @@
     <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\MemberTypeHeuristic.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\SeekingTreatmentOrRehab.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\Questions\MemberTypeQuestion.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\Questions\SeekingTreatmentOrQuestion.cs" />
     <Compile Include="ScheduledHeuristics\IHaveDialog.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
     <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />

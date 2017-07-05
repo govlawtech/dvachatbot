@@ -4,6 +4,7 @@ using System.Linq;
 using DVAESABot.Domain;
 using DVAESABot.ScheduledHeuristics;
 using DVAESABot.ScheduledHeuristics.Heuristics;
+using DVAESABot.ScheduledHeuristics.Heuristics.Questions;
 using DVAESABot.Search;
 using DVAESABot.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,7 +19,7 @@ namespace DVAESABot.Tests
         [TestMethod]
         public void MemberTypeHeuristicTest()
         {
-             IList<IScheduledHeuristic> heuristics = new List<IScheduledHeuristic>() {new MemberTypeHeuristic()};
+             IList<IScheduledHeuristic> heuristics = new List<IScheduledHeuristic>() {new MemberTypeQuestion()};
             var searchClient = new FactSheetSearchClient("3B8D7E200F249FC4C1CFA469799348F8", "dvafactsheets", "dvafactsheetsindex");
             var searchResults = searchClient
                 .GetTopMatchingFactsheets("Ive got mental health issues after deployment", 256).Result;

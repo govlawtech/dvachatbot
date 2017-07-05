@@ -11,17 +11,25 @@ namespace DVAESABot.Dialogs
 {
     public class UserTypeDialog : IDialog<UserType>
     {
-        public Task StartAsync(IDialogContext context)
+        public async Task StartAsync(IDialogContext context)
         {
-            var activity = context.MakeMessage();
-            activity.Text = "Which best describes you?";
-            activity.Type = ActivityTypes.Message;
-            activity.TextFormat = TextFormatTypes.Plain;
-            throw new NotImplementedException();
 
+            List<UserType> choices = Enum.GetValues(typeof(UserType)).Cast<UserType>().ToList();
+            PromptDialog.Choice(
+                context,
+                ResponseReceived,
+                choices,
+                "Whice are you?",
+                "Try again",
+                99
+            );
 
+        }
 
-            
+        private async Task ResponseReceived(IDialogContext context, IAwaitable<UserType> activity)
+        {
+            var userType = await activity;
+            context.Done(userType);
         }
     }
 }
