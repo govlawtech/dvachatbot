@@ -16,7 +16,7 @@ namespace DVAESABot.Dialogs
     [Serializable]
     public class QnAFactsheetDialog : IDialog<string>
     {
-        private readonly List<string> _failureMessagesSelection = new List<string>
+        private static readonly List<string> FailureMessagesSelection = new List<string>
         {
             "Try asking something else or putting your question differently.",
             "Can't find anything on that in this topic.  Ask something else?",
@@ -31,11 +31,10 @@ namespace DVAESABot.Dialogs
 
         [NonSerialized] private QnaMakerKb _qnaMaker;
 
-        private Random _random;
+        [NonSerialized] private static readonly Random _random = new Random();
 
         public QnAFactsheetDialog()
         {
-               _random = new Random();
         }
 
         public QnAFactsheetDialog(string factSheetTitle, string factSheetUrl)
@@ -76,19 +75,17 @@ namespace DVAESABot.Dialogs
             else
             {
                 await context.SayAsync(
-                    $"Try <a href=\"{_factSheetUrl}\">this factsheet on DVA's website.</a>");
+                    $"Try <a href=\"{_factSheetUrl}\" target=\"_blank\">this factsheet</a> on DVA's website.");
                 context.Done("Done");
-
             }
+            
         }
 
-      
         [OnDeserialized]
         internal void _deserialized(StreamingContext context)
         {
             _qnaMaker = new QnaMakerKb();
         }
-
 
         private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
@@ -100,7 +97,7 @@ namespace DVAESABot.Dialogs
             if (qnaResult == null || !qnaResult.Answers.Any() ||
                 qnaResult.Answers.First().Answer == "No good match found in the KB")
             {
-                replyContent = _failureMessagesSelection[_random.Next(0, _failureMessagesSelection.Count)];
+                replyContent = FailureMessagesSelection[_random.Next(0, FailureMessagesSelection.Count)];
                 await context.PostAsync(replyContent);
             }
             else
