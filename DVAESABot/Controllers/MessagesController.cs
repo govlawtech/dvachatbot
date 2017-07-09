@@ -14,6 +14,8 @@ namespace DVAESABot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private static string[] _greetings = {"hi", "hello"};
+        
         /// <summary>
         ///     POST: api/Messages
         ///     Receive a message from a user and reply to it
@@ -21,8 +23,18 @@ namespace DVAESABot
         public async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
             if (activity.Type == ActivityTypes.Message)
-
-                await Conversation.SendAsync(activity, () => new RootDialog());
+            {
+                if (_greetings.Contains(activity.Text, StringComparer.OrdinalIgnoreCase))
+                {
+                    var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    var replyMessage = activity.CreateReply("Hello!", "en");
+                    await connector.Conversations.ReplyToActivityAsync(replyMessage);
+                }
+                else
+                {
+                    await Conversation.SendAsync(activity, () => new RootDialog());
+                }
+            }
 
             else
                 HandleSystemMessage(activity);
