@@ -46,7 +46,7 @@ namespace DVAESABot
                     {
                         var greeting =
                             message.CreateReply(
-                                "Hello, I'm Dewey, DVA's virtual assistant.  I can help you with general veterans enquiries.  (<a href='https://dvachatbot.azurewebsites.net/privacy.html' target='_blank'>Privacy information</a>.)",
+                                "Hello, I'm Chappie, DVA's virtual assistant.  I can help you with general veterans enquiries.  (<a href='https://dvachatbot.azurewebsites.net/privacy.html' target='_blank'>Privacy information</a>.)",
                                 "en");
                         connector.Conversations.ReplyToActivityAsync(greeting)
                             .ContinueWith(task => Task.Delay(2000).Wait())

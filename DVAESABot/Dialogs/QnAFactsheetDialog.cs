@@ -29,7 +29,7 @@ namespace DVAESABot.Dialogs
         private string _kbId;
 
 
-        [NonSerialized] private QnaMakerKb _qnaMaker;
+        [NonSerialized] private QnaMakerClient _qnaMaker;
 
         [NonSerialized] private static readonly Random _random = new Random();
 
@@ -43,7 +43,7 @@ namespace DVAESABot.Dialogs
             _factSheetUrl = factSheetUrl;
             _factSheetCode = DialogHelper.ExtractFactsheetCodeFromFactSheeTitle(factSheetTitle);
             _kbId = KbId.kbIDs[_factSheetCode];
-            _qnaMaker = new QnaMakerKb();
+            _qnaMaker = new QnaMakerClient();
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -84,7 +84,7 @@ namespace DVAESABot.Dialogs
         [OnDeserialized]
         internal void _deserialized(StreamingContext context)
         {
-            _qnaMaker = new QnaMakerKb();
+            _qnaMaker = new QnaMakerClient();
         }
 
         private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<IMessageActivity> item)

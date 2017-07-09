@@ -17,10 +17,12 @@ namespace DVAESABot.Dialogs
     ///     Dialog that interacts with Azure Search.
     /// </summary>
     [Serializable]
-    public class AzureSearchDialog : IDialog<string>
+    public class AzureSearchDialog : IDialog<Tuple<bool,string>>
     {
+        private readonly string _initialSearchText;
         private const int RESULTS_TO_DISPLAY = 5;
 
+        
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
@@ -28,13 +30,13 @@ namespace DVAESABot.Dialogs
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            var userInput = await item;
+            var userInput = (await item).Text;
 
             if (context.UserData.TryGetValue(typeof(ChatContext).Name, out ChatContext cc))
             {
                 using (var ac = FactSheetSearchClient.CreateDefault())
                 {
-                    var results = await ac.GetTopMatchingFactsheets(userInput.Text, 50);
+                    var results = await ac.GetTopMatchingFactsheets(userInput, 5);
                     cc.FactsheetShortlist = results.Results.Select(r => new FactSheetWithScore(r)).ToList();
                     context.UserData.SetValue(typeof(ChatContext).Name,cc);
                 }
@@ -59,7 +61,7 @@ namespace DVAESABot.Dialogs
             else
             {
                 await context.PostAsync("Can't find anything at all on that.");
-                context.Wait(MessageReceivedAsync);
+                context.Done(new Tuple<bool,string>(false,userInput));
             }
             
         }
@@ -92,7 +94,7 @@ namespace DVAESABot.Dialogs
                 
                 if (cc.FactsheetShortlist.Select(fs => fs.FactSheet.FactsheetId).Any(i => i == reply.Text))
                 {
-                    context.Done(reply.Text);
+                    context.Done(new Tuple<bool,string>(true,reply.Text));
                 }
 
                 else
