@@ -34,6 +34,21 @@ namespace DVAESABot.Tests
             Console.WriteLine("Number of shortlisted facsheets after heuristic run: " + c.FactsheetShortlist.Count);
             Assert.IsTrue(secondRun < firstRun);
         }
+
+        [TestMethod]
+        public void GetHeuristicQna()
+        {
+            ChatContext chatContext = ChatContext.CreateEmpty();
+            ScheduledHeuristicsFacade scheduledHeuristicsFacade = new ScheduledHeuristicsFacade(chatContext);
+            var nextQnaPair = scheduledHeuristicsFacade.GetNextQnaPair();
+            var dialog = nextQnaPair.Dialog;
+            Assert.IsTrue(dialog != null);
+            chatContext.User.UserType = UserType.DependentOnMember;
+            var again = scheduledHeuristicsFacade.GetNextQnaPair();
+            Assert.IsTrue(again == null);
+
+        }
+        
     }
 
 

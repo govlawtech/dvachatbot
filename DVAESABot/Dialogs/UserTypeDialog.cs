@@ -9,7 +9,7 @@ using Microsoft.Bot.Connector;
 
 namespace DVAESABot.Dialogs
 {
-    public class UserTypeDialog : IDialog<UserType>
+    public class UserTypeDialog : IDialog
     {
         public async Task StartAsync(IDialogContext context)
         {

@@ -212,12 +212,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalMessageHandlersBotModule.cs" />
+    <Compile Include="ScheduledHeuristics\HeuristicQnAs\MemberTypeHeuristicQnA.cs" />
+    <Compile Include="ScheduledHeuristics\IHeuristicQnA.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\Questions\MemberTypeQuestion.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\Questions\SeekingTreatmentOrQuestion.cs" />
-    <Compile Include="ScheduledHeuristics\IHaveDialog.cs" />
+    <Compile Include="ScheduledHeuristics\IHaveDialogs.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
     <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />
     <Compile Include="ScheduledHeuristics\Scheduler.cs" />

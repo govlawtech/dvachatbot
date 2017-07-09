@@ -17,18 +17,12 @@ namespace DVAESABot.ScheduledHeuristics
         public Scheduler(IList<IScheduledHeuristic> heuristics, ChatContext chatContext)
         {
             _heuristicsRuleBase = heuristics;
-            _availableHeuristics.AddRange(_heuristicsRuleBase);
+            AvailableHeuristics.AddRange(_heuristicsRuleBase);
             _chatContext = chatContext;
         }
 
-        public Option<IScheduledHeuristic> GetTopOfAgenda()
-        {
-            if (_agenda.Any())
-            {
-                return Option.Some(_agenda.First());
-            }
-            return Option.None<IScheduledHeuristic>();
-        }
+        public List<IScheduledHeuristic> AvailableHeuristics => _availableHeuristics;
+
 
         public void Run()
         {
@@ -58,14 +52,14 @@ namespace DVAESABot.ScheduledHeuristics
 
         private void ActivateHeuristics(ChatContext chatContext)
         {
-            foreach (var h in _availableHeuristics)
+            foreach (var h in AvailableHeuristics)
             {
                 if (h.Condition(chatContext))
                     _agenda.Add(h);
             }
             foreach (var h in _agenda)
             {
-                _availableHeuristics.Remove(h);
+                AvailableHeuristics.Remove(h);
             }
         }
     }

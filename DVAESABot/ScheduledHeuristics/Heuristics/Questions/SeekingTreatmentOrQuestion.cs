@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
 {
-    internal class SeekingTreatmentOrQuestion : IScheduledHeuristic, IHaveDialog<bool>
+    internal class SeekingTreatmentOrQuestion : IScheduledHeuristic
     {
         public IDialog<bool> GetDialog()
         {
