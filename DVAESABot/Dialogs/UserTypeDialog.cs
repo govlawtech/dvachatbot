@@ -9,7 +9,7 @@ using Microsoft.Bot.Connector;
 
 namespace DVAESABot.Dialogs
 {
-    public class UserTypeDialog : IDialog
+    public class UserTypeDialog : IDialog<UserType>, IDialog
     {
         public async Task StartAsync(IDialogContext context)
         {
@@ -21,7 +21,7 @@ namespace DVAESABot.Dialogs
                 choices,
                 "Whice are you?",
                 "Try again",
-                99
+                3
             );
 
         }

@@ -8,9 +8,14 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 {
-    public class MemberTypeHeuristicQnA : IHeuristicQnA
+    public class MemberTypeHeuristicQnA : IHeuristicQnA<UserType>,IHeuristicQnA
     {
-        public IDialog Dialog => new UserTypeDialog();
+        
+        public IDialog<UserType> Dialog => new UserTypeDialog();
+
+
+        IDialog<object> IHeuristicQnA<object>.Dialog => new UserTypeDialog();
+
         public void ApplyResult(ChatContext chatContext, object dialogResult)
         {
             chatContext.User.UserType = dialogResult as UserType?;

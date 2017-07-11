@@ -218,8 +218,8 @@
     <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\Questions\MemberTypeQuestion.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\Questions\SeekingTreatmentOrQuestion.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\MemberTypeQuestion.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\SeekingTreatmentOrQuestion.cs" />
     <Compile Include="ScheduledHeuristics\IHaveDialogs.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
     <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />

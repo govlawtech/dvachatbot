@@ -8,10 +8,15 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics
 {
-    public interface IHeuristicQnA
+    public interface IHeuristicQnA<out TDialogResult>
     {
-        IDialog Dialog { get; }
+        IDialog<TDialogResult> Dialog { get; }
         void ApplyResult(ChatContext chatContext, object dialogResult);
         bool IsAlreadyAnswered(ChatContext chatContext);
+    }
+
+    public interface IHeuristicQnA : IHeuristicQnA<object>
+    {
+        
     }
 }

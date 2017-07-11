@@ -2,7 +2,7 @@
 using DVAESABot.Domain;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
+namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 {
     internal class SeekingTreatmentOrQuestion : IScheduledHeuristic
     {
