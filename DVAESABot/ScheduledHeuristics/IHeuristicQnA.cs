@@ -12,7 +12,7 @@ namespace DVAESABot.ScheduledHeuristics
     {
         IDialog<TDialogResult> Dialog { get; }
         void ApplyResult(ChatContext chatContext, object dialogResult);
-        bool IsAlreadyAnswered(ChatContext chatContext);
+        bool IsRelevant(ChatContext chatContext);
     }
 
     public interface IHeuristicQnA : IHeuristicQnA<object>

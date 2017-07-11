@@ -29,7 +29,7 @@ namespace DVAESABot.ScheduledHeuristics
                 select qnas;
 
             var stillRequired = questionAndAnswers
-                .Where(qna => !qna.IsAlreadyAnswered(_chatContext));
+                .Where(qna => !qna.IsRelevant(_chatContext));
 
             return stillRequired.FirstOrDefault();
         }
