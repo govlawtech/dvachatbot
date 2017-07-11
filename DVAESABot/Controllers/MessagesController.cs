@@ -14,6 +14,8 @@ namespace DVAESABot
     [BotAuthentication]
     public class MessagesController : ApiController
     {
+        private static string[] _greetings = {"hi", "hello"};
+        
         /// <summary>
         ///     POST: api/Messages
         ///     Receive a message from a user and reply to it
@@ -21,8 +23,18 @@ namespace DVAESABot
         public async Task<HttpResponseMessage> Post([FromBody] Activity activity)
         {
             if (activity.Type == ActivityTypes.Message)
-
-                await Conversation.SendAsync(activity, () => new RootDialog());
+            {
+                if (_greetings.Contains(activity.Text, StringComparer.OrdinalIgnoreCase))
+                {
+                    var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+                    var replyMessage = activity.CreateReply("Hello!", "en");
+                    await connector.Conversations.ReplyToActivityAsync(replyMessage);
+                }
+                else
+                {
+                    await Conversation.SendAsync(activity, () => new RootDialog());
+                }
+            }
 
             else
                 HandleSystemMessage(activity);
@@ -46,7 +58,7 @@ namespace DVAESABot
                     {
                         var greeting =
                             message.CreateReply(
-                                "Hello, I'm Dewey, DVA's virtual assistant.  I can help you with general veterans enquiries.  (<a href='https://dvachatbot.azurewebsites.net/privacy.html' target='_blank'>Privacy information</a>.)",
+                                "Hello, I'm Chappie, DVA's <b>computerised, electronic</b> chat bot. See (<a href='https://dvachatbot.azurewebsites.net/privacy.html' target='_blank'>Privacy information</a>.)",
                                 "en");
                         connector.Conversations.ReplyToActivityAsync(greeting)
                             .ContinueWith(task => Task.Delay(2000).Wait())

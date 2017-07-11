@@ -14,14 +14,15 @@ using Newtonsoft.Json;
 
 namespace DVAESABot.QnAMaker
 {
-    public class QnaMakerKb
+    public class QnaMakerClient
     {
+        private readonly string NOANSWERANSWER = "No good match found in the KB";
         private readonly TelemetryClient _telemetry;
         private readonly Uri qnaBaseUri = new Uri("https://westus.api.cognitive.microsoft.com/qnamaker/v2.0");
 
         private readonly string SubscriptionKey = ConfigurationManager.AppSettings["QnaSubscriptionKey"];
 
-        public QnaMakerKb()
+        public QnaMakerClient()
         {
             _telemetry = new TelemetryClient();
         }
@@ -49,8 +50,8 @@ namespace DVAESABot.QnAMaker
             }
 
             var result = ConvertResponseFromJson(responseString);
-            
-            return result;
+
+            return result.WithNoAnswerAnswerStripped(NOANSWERANSWER);
         }
 
         private QnaMakerResult ConvertResponseFromJson(string responseString)

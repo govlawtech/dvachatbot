@@ -10,6 +10,8 @@ namespace DVAESABot.QnaMaker
         // Contains mapping of Factsheet Code (e.g. MRC04) to knowledge base ID
         public static Dictionary<string, string> kbIDs;
 
+        public static readonly string TopQsKbId = "13839c4d-6826-4c6a-b0f3-069ef5039fc7";
+
         static KbId()
         {
             kbIDs = new Dictionary<string, string>()

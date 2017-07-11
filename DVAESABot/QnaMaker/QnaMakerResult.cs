@@ -10,8 +10,18 @@ namespace DVAESABot.QnAMaker
 
     public class QnaMakerResult
     {
+
+
         [JsonProperty(PropertyName = "answers")]
         public List<AnswerObject> Answers { get; set; }
+
+        public QnaMakerResult WithNoAnswerAnswerStripped(string noAnswerAnswer)
+        {
+            return new QnaMakerResult()
+            {
+                Answers = this.Answers.Where(a => a.Answer != noAnswerAnswer).ToList()
+            };
+        }
     }
 
     public class AnswerObject
@@ -25,5 +35,7 @@ namespace DVAESABot.QnAMaker
         [JsonProperty(PropertyName = "score")]
         public double Score { get; set; }
     }
+
+
     
 }

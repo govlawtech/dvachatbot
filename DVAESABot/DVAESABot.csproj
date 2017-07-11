@@ -192,6 +192,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Dialogs\AzureSearchDialog.cs" />
+    <Compile Include="Dialogs\CuratedQuestionsDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
     <Compile Include="Dialogs\GetDateDialog.cs" />
     <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />

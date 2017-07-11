@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
-using AdaptiveCards;
 using DVAESABot.QnaMaker;
 using DVAESABot.QnAMaker;
 using Microsoft.Bot.Builder.Dialogs;
@@ -18,20 +16,18 @@ namespace DVAESABot.Dialogs
     {
         private static readonly List<string> FailureMessagesSelection = new List<string>
         {
-            "Try asking something else or putting your question differently.",
-            "Can't find anything on that in this topic.  Ask something else?",
-            "Don't know anything about that.  Try asking something else."
+            "Don't have an answer to that within this topic specifically."
         };
+
+        [NonSerialized] private static readonly Random _random = new Random();
+        private readonly string _factSheetCode;
 
         private readonly string _factSheetTitle;
         private readonly string _factSheetUrl;
-        private readonly string _factSheetCode;
-        private string _kbId;
+        private readonly string _kbId;
 
 
-        [NonSerialized] private QnaMakerKb _qnaMaker;
-
-        [NonSerialized] private static readonly Random _random = new Random();
+        [NonSerialized] private QnaMakerClient _qnaMaker;
 
         public QnAFactsheetDialog()
         {
@@ -43,34 +39,37 @@ namespace DVAESABot.Dialogs
             _factSheetUrl = factSheetUrl;
             _factSheetCode = DialogHelper.ExtractFactsheetCodeFromFactSheeTitle(factSheetTitle);
             _kbId = KbId.kbIDs[_factSheetCode];
-            _qnaMaker = new QnaMakerKb();
+            _qnaMaker = new QnaMakerClient();
         }
 
         public async Task StartAsync(IDialogContext context)
         {
             var factSheetName = DialogHelper.ExtractTopicFromFactSheetTitle(_factSheetTitle);
             var hintMessage = new StringBuilder();
-            
+
             var questionsAndAnswers = await _qnaMaker.GetQuestionsAndAnswers(_kbId);
 
             if (questionsAndAnswers.Any())
             {
                 if (questionsAndAnswers.ContainsKey("Purpose"))
-                {
                     hintMessage.AppendLine(RemoveFactsheetReferenceFromPurposeSection(questionsAndAnswers["Purpose"]));
-                }
 
-                IEnumerable<string> options = questionsAndAnswers.Keys.Where(q => q != "Purpose").ToList();
-                if (options.Any())
-                {
-                    hintMessage.AppendLine("<br>Suggested questions:");
-                    var suggestions = String.Join("", options.Select(o => $"<li>{o}</li>"));
-                    var suggestionText = $"<ul>{suggestions}</ul>";
-                    hintMessage.Append(suggestionText);
-                }
+                IEnumerable<string> qsInKb = questionsAndAnswers.Keys.Where(q => q != "Purpose").ToList();
 
-                await context.PostAsync(hintMessage.ToString());
-                context.Wait(QnAQuestionReceived);
+                PromptDialog.Choice(
+                    context,
+                    QnAQuestionReceived,
+                    qsInKb,
+                    "Pick one:",
+                    "Try again:",
+                    3
+                );
+
+
+                //hintMessage.AppendLine("<br>Suggested questions:");
+                //var suggestions = String.Join("", qsInKb.Select(o => $"<li>{o}</li>"));
+                //var suggestionText = $"<ul>{suggestions}</ul>";
+                //hintMessage.Append(suggestionText);
             }
             else
             {
@@ -78,20 +77,21 @@ namespace DVAESABot.Dialogs
                     $"Try <a href=\"{_factSheetUrl}\" target=\"_blank\">this factsheet</a> on DVA's website.");
                 context.Done("Done");
             }
-            
         }
+
 
         [OnDeserialized]
         internal void _deserialized(StreamingContext context)
         {
-            _qnaMaker = new QnaMakerKb();
+            _qnaMaker = new QnaMakerClient();
         }
 
-        private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<IMessageActivity> item)
-        {
-            var message = await item;
 
-            var qnaResult = await _qnaMaker.SearchFaqAsync(message.Text, _kbId);
+        private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<string> activity)
+        {
+            var message = (await activity);
+
+            var qnaResult = await _qnaMaker.SearchFaqAsync(message, _kbId);
             string replyContent;
 
             if (qnaResult == null || !qnaResult.Answers.Any() ||
@@ -105,12 +105,18 @@ namespace DVAESABot.Dialogs
                 replyContent = qnaResult.Answers.First().Answer;
                 await context.PostAsync(replyContent);
             }
+
+            context.Wait(async (dialogContext, result) =>
+            {
+                var nextMessage = (await result).Text;
+                await QnAQuestionReceived(dialogContext, Awaitable.FromItem(nextMessage));
+            });
+
         }
 
         private static string RemoveFactsheetReferenceFromPurposeSection(string purposeText)
         {
             return purposeText.Replace("This Factsheet", "This topic");
         }
-
     }
 }
