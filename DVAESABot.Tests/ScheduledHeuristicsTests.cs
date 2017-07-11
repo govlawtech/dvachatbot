@@ -48,7 +48,31 @@ namespace DVAESABot.Tests
             Assert.IsTrue(again == null);
 
         }
-        
+
+        [TestMethod]
+        public void InjuryQuestionNotRelevant()
+        {
+            ChatContext chatContext = ChatContext.CreateEmpty();
+            ScheduledHeuristicsFacade scheduledHeuristicsFacade = new ScheduledHeuristicsFacade(chatContext);
+            chatContext.User.UserType = UserType.DependentOnMember;
+            scheduledHeuristicsFacade.Run();
+            var nextQ = scheduledHeuristicsFacade.GetNextQnaPair();
+            Assert.IsTrue(nextQ == null);
+
+        }
+
+        [TestMethod]
+        public void InjuryQuestionISRelevant()
+        {
+            ChatContext chatContext = ChatContext.CreateEmpty();
+            ScheduledHeuristicsFacade scheduledHeuristicsFacade = new ScheduledHeuristicsFacade(chatContext);
+            chatContext.User.UserType = UserType.Member;
+            scheduledHeuristicsFacade.Run();
+            var nextQ = scheduledHeuristicsFacade.GetNextQnaPair();
+            Assert.IsTrue(nextQ != null);
+
+        }
+
     }
 
 

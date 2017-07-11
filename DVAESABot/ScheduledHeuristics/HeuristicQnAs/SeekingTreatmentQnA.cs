@@ -4,18 +4,27 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 {
-    public class SeekingTreatmentQnA : IHeuristicQnA<bool,bool>
+    public class SeekingTreatmentQnA : IHeuristicQnA<bool>, IHeuristicQnA
     {
-        public IDialog<bool> Dialog => new YesNoDialog("Are you seeking treatment or rehabilitation for a medical condition?");
+        private YesNoDialog _dialog;
 
-        public void ApplyResult(ChatContext chatContext, bool dialogResult)
+        public SeekingTreatmentQnA()
         {
-            chatContext.User.SeekingTreatmentOrRehab = dialogResult;
+            _dialog = new YesNoDialog("Are you seeking treatment or rehabilitation for an injury or illness?");
         }
 
-        public bool IsStillRelevant(ChatContext chatContext)
+        IDialog<bool> IHeuristicQnA<bool>.Dialog => _dialog;
+
+        public void ApplyResult(ChatContext chatContext, object dialogResult)
         {
-            return (chatContext.User.UserType == UserType.Member && !chatContext.User.SeekingTreatmentOrRehab.HasValue);
+            chatContext.User.SeekingTreatmentOrRehab = dialogResult as bool?;
         }
+
+        public bool IsRelevant(ChatContext chatContext)
+        {
+            return chatContext.User.UserType == UserType.Member && !chatContext.User.SeekingTreatmentOrRehab.HasValue;
+        }
+
+        IDialog<object> IHeuristicQnA<object>.Dialog => _dialog;
     }
 }

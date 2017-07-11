@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using DVAESABot.Domain;
+using DVAESABot.ScheduledHeuristics.Heuristics;
 using DVAESABot.ScheduledHeuristics.Heuristics.Questions;
 using Microsoft.Bot.Builder.Dialogs;
 
@@ -17,7 +18,13 @@ namespace DVAESABot.ScheduledHeuristics
         {
             _chatContext = chatContext;
             var memberTypeHeuristic = new MemberTypeQuestion();
-            _scheduler = new Scheduler(new List<IScheduledHeuristic>() {memberTypeHeuristic}, chatContext);
+            var seekingTreatment = new SeekingTreatmentQuestion();
+            _scheduler = new Scheduler(new List<IScheduledHeuristic>() {memberTypeHeuristic,seekingTreatment}, chatContext);
+            _scheduler.Run();
+        }
+
+        public void Run()
+        {
             _scheduler.Run();
         }
 
@@ -29,7 +36,7 @@ namespace DVAESABot.ScheduledHeuristics
                 select qnas;
 
             var stillRequired = questionAndAnswers
-                .Where(qna => !qna.IsRelevant(_chatContext));
+                .Where(qna => qna.IsRelevant(_chatContext));
 
             return stillRequired.FirstOrDefault();
         }

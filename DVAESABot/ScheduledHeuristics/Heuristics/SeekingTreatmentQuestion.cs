@@ -1,16 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using DVAESABot.Domain;
-using Microsoft.Bot.Builder.Dialogs;
+using DVAESABot.ScheduledHeuristics.HeuristicQnAs;
 
-namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    internal class SeekingTreatmentOrQuestion : IScheduledHeuristic
+    internal class SeekingTreatmentQuestion : IScheduledHeuristic, IHaveDialogs
     {
-        public IDialog<bool> GetDialog()
-        {
-           throw new NotImplementedException();
-        }
-
+       
         public void ApplyResult(bool result, ChatContext chatContext)
         {
             chatContext.User.SeekingTreatmentOrRehab = result;
@@ -29,5 +26,7 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 
         public Action<ChatContext> Action => c => c.FactsheetShortlist = c.FactsheetShortlist.RemoveAllCategoriesOtherThan("MRC", "HSV",
             "VVCS");
+
+        public IList<IHeuristicQnA> HeuristicQnAs => new List<IHeuristicQnA>() {new SeekingTreatmentQnA()};
     }
 }
