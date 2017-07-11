@@ -86,8 +86,6 @@ namespace DVAESABot.Dialogs
             _qnaMaker = new QnaMakerClient();
         }
 
-        
-
 
         private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<string> activity)
         {
@@ -107,7 +105,6 @@ namespace DVAESABot.Dialogs
                 replyContent = qnaResult.Answers.First().Answer;
                 await context.PostAsync(replyContent);
             }
-
 
             context.Wait(async (dialogContext, result) =>
             {

@@ -23,7 +23,7 @@ namespace DVAESABot.Dialogs
             var text = (await message).Text;
             var qnaClient = new QnaMakerClient();
             var result = await qnaClient.SearchFaqAsync(text, KbId.TopQsKbId);
-            if (result.Answers.Any())
+            if (result.Answers.Any(a => a.Score > 40D))
             {
                 await dialogContext.SayAsync(result.Answers.First().Answer);
                 dialogContext.Done(new Tuple<bool,string>(true,text));
