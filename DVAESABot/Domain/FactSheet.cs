@@ -32,7 +32,7 @@ namespace DVAESABot.Domain
             var factsheetCode = Regex.Match(FactsheetId, "\\s[A-Z]+[0-9-]+\\s");
             if (factsheetCode.Success)
             {
-                var withNumbersStripped = factsheetCode.Value.Reverse()
+                var withNumbersStripped = factsheetCode.Value.Trim().Reverse()
                     .SkipWhile(c => Regex.IsMatch(c.ToString(), "[0-9-]")).Reverse();
                 return String.Join("", withNumbersStripped);
             }

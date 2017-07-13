@@ -20,7 +20,7 @@ namespace DVAESABot.Dialogs
                 AnswerReceived,
                 _prompt,
                 "Yes or no.",
-                99
+                3
                 );
         }
 

@@ -99,7 +99,7 @@ namespace DVAESABot.Dialogs
 
                 else
                 {
-                    await this.MessageReceivedAsync(context, item);
+                    context.Done(new Tuple<bool,string>(false,reply.Text));
                 }
             }
         }

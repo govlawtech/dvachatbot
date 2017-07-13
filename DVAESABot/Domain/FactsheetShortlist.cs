@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using Microsoft.Azure.Search.Models;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.Domain
 {
@@ -54,4 +55,20 @@ namespace DVAESABot.Domain
             return factsheetCode.Value.Contains(categoryCode);
         }
     }
+
+    public static class DialogContextExtensions
+    {
+        public static ChatContext GetChatContextOrDefault(this IDialogContext dialogContext)
+        {
+            dialogContext.UserData.TryGetValue(typeof(ChatContext).Name, out ChatContext cc);
+            return cc;
+        }
+
+        public static void SetChatContext(this IDialogContext dialogContext, ChatContext chatContext)
+        {
+            dialogContext.UserData.SetValue(typeof(ChatContext).Name,chatContext);
+        }
+    }
+
+    
 }

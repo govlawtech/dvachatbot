@@ -195,6 +195,7 @@
     <Compile Include="Dialogs\CuratedQuestionsDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
     <Compile Include="Dialogs\GetDateDialog.cs" />
+    <Compile Include="Dialogs\HeuristicsParentDialog.cs" />
     <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
     <Compile Include="Dialogs\LuisMRCADialog.cs" />
     <Compile Include="Dialogs\NumberDialog.cs" />
