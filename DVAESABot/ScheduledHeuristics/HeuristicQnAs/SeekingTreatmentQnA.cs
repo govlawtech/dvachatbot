@@ -1,3 +1,4 @@
+using System.Linq;
 using DVAESABot.Dialogs;
 using DVAESABot.Domain;
 using Microsoft.Bot.Builder.Dialogs;
@@ -22,7 +23,11 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 
         public bool IsRelevant(ChatContext chatContext)
         {
-            return chatContext.User.UserType == UserType.Member && !chatContext.User.SeekingTreatmentOrRehab.HasValue;
+            var categoriesForTreatmentAndRehab = new[] {"HSV", "MRC"};
+
+            return chatContext.User.UserType == UserType.Member &&
+                   !chatContext.User.SeekingTreatmentOrRehab.HasValue &&
+                   chatContext.FactsheetShortlist.GetCategories().Any(c => !categoriesForTreatmentAndRehab.Contains(c));
         }
 
     }

@@ -21,7 +21,8 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 
         public bool IsRelevant(ChatContext chatContext)
         {
-            return !chatContext.User.UserType.HasValue;
+            return !chatContext.User.UserType.HasValue &&
+                   chatContext.FactsheetShortlist.GetCategories().Count() > 1;
         }
     }
 }

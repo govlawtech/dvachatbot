@@ -8,7 +8,7 @@ using Microsoft.Azure.Search.Models;
 namespace DVAESABot.Domain
 {
    
-    public static class FactsheetShortlistExensions
+    public static class FactsheetShortlistExtensions
     {
      
         public static List<FactSheetWithScore> RemoveAllCategoriesOtherThan(this List<FactSheetWithScore> factSheetWithScores, params string[] categoryCodes)
@@ -36,6 +36,11 @@ namespace DVAESABot.Domain
                 select doc;
 
             return cutDown.ToList();
+        }
+
+        public static IEnumerable<string> GetCategories(this List<FactSheetWithScore> factSheetWithScores)
+        {
+            return factSheetWithScores.Select(fs => fs.FactSheet.GetCategoryCode()).ToList();
         }
     }
 

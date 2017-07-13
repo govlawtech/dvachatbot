@@ -7,6 +7,7 @@ using Microsoft.Azure.Search.Models;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Azure.Search;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DVAESABot.Domain
 {
@@ -25,5 +26,17 @@ namespace DVAESABot.Domain
         public string Purpose { get; set; }
         
         public IEnumerable<string> CuratedKeyWords { get; set; }
+
+        public string GetCategoryCode()
+        {
+            var factsheetCode = Regex.Match(FactsheetId, "\\s[A-Z]+[0-9-]+\\s");
+            if (factsheetCode.Success)
+            {
+                var withNumbersStripped = factsheetCode.Value.Reverse()
+                    .SkipWhile(c => Regex.IsMatch(c.ToString(), "[0-9-]")).Reverse();
+                return String.Join("", withNumbersStripped);
+            }
+            return null;
+        }
     }
 }
