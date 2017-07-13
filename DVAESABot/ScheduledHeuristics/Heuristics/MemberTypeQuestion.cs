@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using DVAESABot.Dialogs;
 using DVAESABot.Domain;
-using DVAESABot.ScheduledHeuristics.HeuristicQnAs;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.VisualBasic.ApplicationServices;
 
-namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    class MemberTypeQuestion : IScheduledHeuristic, IHaveDialogs
+    class MemberTypeQuestion : IScheduledHeuristic
     {
         public string Description => "Member Type";
 
@@ -46,11 +41,7 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
             }
         };
 
-
-        public IList<IHeuristicQnA> HeuristicQnAs => new List<IHeuristicQnA>()
-        {
-            new MemberTypeHeuristicQnA()
-        };
+        
     }
 
     

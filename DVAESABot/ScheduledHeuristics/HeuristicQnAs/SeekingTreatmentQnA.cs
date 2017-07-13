@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 {
-    public class SeekingTreatmentQnA : IHeuristicQnA<bool>, IHeuristicQnA
+    public class SeekingTreatmentQnA : IHeuristicQnA<bool>
     {
         private YesNoDialog _dialog;
 
@@ -25,6 +25,5 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
             return chatContext.User.UserType == UserType.Member && !chatContext.User.SeekingTreatmentOrRehab.HasValue;
         }
 
-        IDialog<object> IHeuristicQnA<object>.Dialog => _dialog;
     }
 }

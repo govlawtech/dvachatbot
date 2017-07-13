@@ -4,7 +4,6 @@ using System.Linq;
 using DVAESABot.Domain;
 using DVAESABot.ScheduledHeuristics;
 using DVAESABot.ScheduledHeuristics.Heuristics;
-using DVAESABot.ScheduledHeuristics.Heuristics.Questions;
 using DVAESABot.Search;
 using DVAESABot.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,43 +34,7 @@ namespace DVAESABot.Tests
             Assert.IsTrue(secondRun < firstRun);
         }
 
-        [TestMethod]
-        public void GetHeuristicQna()
-        {
-            ChatContext chatContext = ChatContext.CreateEmpty();
-            ScheduledHeuristicsFacade scheduledHeuristicsFacade = new ScheduledHeuristicsFacade(chatContext);
-            var nextQnaPair = scheduledHeuristicsFacade.GetNextQnaPair();
-            var dialog = nextQnaPair.Dialog;
-            Assert.IsTrue(dialog != null);
-            chatContext.User.UserType = UserType.DependentOnMember;
-            var again = scheduledHeuristicsFacade.GetNextQnaPair();
-            Assert.IsTrue(again == null);
-
-        }
-
-        [TestMethod]
-        public void InjuryQuestionNotRelevant()
-        {
-            ChatContext chatContext = ChatContext.CreateEmpty();
-            ScheduledHeuristicsFacade scheduledHeuristicsFacade = new ScheduledHeuristicsFacade(chatContext);
-            chatContext.User.UserType = UserType.DependentOnMember;
-            scheduledHeuristicsFacade.Run();
-            var nextQ = scheduledHeuristicsFacade.GetNextQnaPair();
-            Assert.IsTrue(nextQ == null);
-
-        }
-
-        [TestMethod]
-        public void InjuryQuestionISRelevant()
-        {
-            ChatContext chatContext = ChatContext.CreateEmpty();
-            ScheduledHeuristicsFacade scheduledHeuristicsFacade = new ScheduledHeuristicsFacade(chatContext);
-            chatContext.User.UserType = UserType.Member;
-            scheduledHeuristicsFacade.Run();
-            var nextQ = scheduledHeuristicsFacade.GetNextQnaPair();
-            Assert.IsTrue(nextQ != null);
-
-        }
+       
 
     }
 

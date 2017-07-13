@@ -5,7 +5,7 @@ using DVAESABot.ScheduledHeuristics.HeuristicQnAs;
 
 namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    internal class SeekingTreatmentQuestion : IScheduledHeuristic, IHaveDialogs
+    internal class SeekingTreatmentQuestion : IScheduledHeuristic
     {
        
         public void ApplyResult(bool result, ChatContext chatContext)
@@ -27,6 +27,6 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
         public Action<ChatContext> Action => c => c.FactsheetShortlist = c.FactsheetShortlist.RemoveAllCategoriesOtherThan("MRC", "HSV",
             "VVCS");
 
-        public IList<IHeuristicQnA> HeuristicQnAs => new List<IHeuristicQnA>() {new SeekingTreatmentQnA()};
+       
     }
 }

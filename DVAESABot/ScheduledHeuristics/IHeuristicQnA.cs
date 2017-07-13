@@ -15,8 +15,4 @@ namespace DVAESABot.ScheduledHeuristics
         bool IsRelevant(ChatContext chatContext);
     }
 
-    public interface IHeuristicQnA : IHeuristicQnA<object>
-    {
-        
-    }
 }

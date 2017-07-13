@@ -221,9 +221,7 @@
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\MemberTypeQuestion.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\SeekingTreatmentQuestion.cs" />
-    <Compile Include="ScheduledHeuristics\IHaveDialogs.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
-    <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />
     <Compile Include="ScheduledHeuristics\Scheduler.cs" />
     <Compile Include="Heuristics\EnlistBefore1July2004Heuristic.cs" />
     <Compile Include="Heuristics\IHeuristic.cs" />
