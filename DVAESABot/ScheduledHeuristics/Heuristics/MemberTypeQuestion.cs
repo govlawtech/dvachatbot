@@ -20,7 +20,7 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
                     case UserType.Member:
                     {
                         c.FactsheetShortlist = c.FactsheetShortlist.RemoveCategories("GS", "HIP");
-                        break;
+                        break; 
                     }
                     case UserType.DependentOnDeceasedMember:
                     {
@@ -40,9 +40,5 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
                 }
             }
         };
-
-        
     }
-
-    
 }

@@ -44,16 +44,19 @@ namespace DVAESABot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            var factSheetName = DialogHelper.ExtractTopicFromFactSheetTitle(_factSheetTitle);
-            var hintMessage = new StringBuilder();
-
+            
             var questionsAndAnswers = await _qnaMaker.GetQuestionsAndAnswers(_kbId);
 
             if (questionsAndAnswers.Any())
             {
                 if (questionsAndAnswers.ContainsKey("Purpose"))
-                    hintMessage.AppendLine(RemoveFactsheetReferenceFromPurposeSection(questionsAndAnswers["Purpose"]));
-
+                {
+                    var outlineMessage = context.MakeMessage();
+                    outlineMessage.TextFormat = "plain";
+                    outlineMessage.Text = RemoveFactsheetReferenceFromPurposeSection(questionsAndAnswers["Purpose"]);
+                    await context.PostAsync(outlineMessage);
+                }
+                
                 IEnumerable<string> qsInKb = questionsAndAnswers.Keys.Where(q => q != "Purpose").ToList();
 
                 PromptDialog.Choice(
@@ -64,12 +67,6 @@ namespace DVAESABot.Dialogs
                     "Try again:",
                     3
                 );
-
-
-                //hintMessage.AppendLine("<br>Suggested questions:");
-                //var suggestions = String.Join("", qsInKb.Select(o => $"<li>{o}</li>"));
-                //var suggestionText = $"<ul>{suggestions}</ul>";
-                //hintMessage.Append(suggestionText);
             }
             else
             {
@@ -79,6 +76,7 @@ namespace DVAESABot.Dialogs
             }
         }
 
+        
 
         [OnDeserialized]
         internal void _deserialized(StreamingContext context)

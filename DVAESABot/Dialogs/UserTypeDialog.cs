@@ -19,11 +19,10 @@ namespace DVAESABot.Dialogs
                 context,
                 ResponseReceived,
                 choices,
-                "Whice are you?",
+                "Which best describes you?",
                 "Try again",
                 3
             );
-
         }
 
         private async Task ResponseReceived(IDialogContext context, IAwaitable<UserType> activity)
