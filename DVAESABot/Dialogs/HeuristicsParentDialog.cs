@@ -10,7 +10,7 @@ using NodaTime;
 namespace DVAESABot.Dialogs
 {
     [Serializable]
-    public class HeuristicsParentDialog : IDialog<string>
+    public class HeuristicsParentDialog : IDialog<object>
     {
         private readonly HeuristicsFacade _heuristicsFacade = new HeuristicsFacade();
 

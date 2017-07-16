@@ -24,11 +24,11 @@ namespace DVAESABot.Dialogs
             if (answerWasShown)
                 context.Call(new CuratedQuestionsDialog(), ResumeAfterCuratedQuestionsDialog);
             else
-                await context.Forward(new AzureSearchDialog(), ResumeAfterSearchDialog,
+                await context.Forward(new AzureSearchDialog(), ResumeAfterTopicSelection,
                     new Activity {Text = answerShown});
         }
 
-        private async Task ResumeAfterSearchDialog(IDialogContext context, IAwaitable<Tuple<SearchSelection, string>> result)
+        private async Task ResumeAfterTopicSelection(IDialogContext context, IAwaitable<Tuple<SearchSelection, string>> result)
         {
             var awaitedResult = await result;
             var userResponseToSearchResults = awaitedResult.Item1;
@@ -45,13 +45,45 @@ namespace DVAESABot.Dialogs
             }
             else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
             {
-                await context.Forward(new AzureSearchDialog(), ResumeAfterSearchDialog,
+                await context.Forward(new AzureSearchDialog(), ResumeAfterTopicSelection,
                     new Activity { Text = awaitedResult.Item2 });
             }
-            else
+            else if (userResponseToSearchResults == SearchSelection.NotInterestedExpressed)
             {
-                context.SayAsync($"When I asked the topic you were interested in, you said {}")
-                context.Call(new HeuristicsParentDialog(), LandingPad);
+                context.Call(new HeuristicsParentDialog(), ResumeAfterHeuristicsRun);
+
+            }
+        }
+
+        private async Task ResumeAfterHeuristicsRun(IDialogContext context, IAwaitable<object> result)
+        {
+            context.Call(new TopicSelectionDialog(), ResumeAfterHeuristicDrivenTopics);
+        }
+
+        private async Task ResumeAfterHeuristicDrivenTopics(IDialogContext context, IAwaitable<Tuple<SearchSelection, string>> result)
+        {
+
+            var awaitedResult = await result;
+            var userResponseToSearchResults = awaitedResult.Item1;
+            if (userResponseToSearchResults == SearchSelection.TopicSelected)
+            {
+                var chosenFactSheetTitle = awaitedResult.Item2;
+
+                var factsheet = context.GetChatContextOrDefault().FactsheetShortlist.FirstOrDefault(f => f.FactSheet.FactsheetId == chosenFactSheetTitle);
+                if (factsheet != null)
+                {
+                    var url = factsheet.FactSheet.Url;
+                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), LandingPad);
+                }
+            }
+            else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
+            {
+                await context.Forward(new AzureSearchDialog(), ResumeAfterTopicSelection,
+                    new Activity { Text = awaitedResult.Item2 });
+            }
+            else if (userResponseToSearchResults == SearchSelection.NotInterestedExpressed)
+            {
+                context.Call(new TopicSelectionDialog(), ResumeAfterHeuristicDrivenTopics);
             }
         }
 
