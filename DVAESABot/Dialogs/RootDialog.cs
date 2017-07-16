@@ -50,6 +50,7 @@ namespace DVAESABot.Dialogs
             }
             else
             {
+                context.SayAsync($"When I asked the topic you were interested in, you said {}")
                 context.Call(new HeuristicsParentDialog(), LandingPad);
             }
         }

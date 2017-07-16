@@ -16,7 +16,6 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
             if (!c.User.Age.HasValue) return false;
             return c.User.Age.Value > 67;
         };
-    
 
     public Action<ChatContext> Action => c => c.FactsheetShortlist = c.FactsheetShortlist.RemoveCategories("ISS");
     }

@@ -27,8 +27,7 @@ namespace DVAESABot.Dialogs
     {
         private readonly string NOT_INTERESTED_TEXT = "NI";
         private readonly int RESULTS_TO_DISPLAY = 5;
-
-
+        
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
@@ -36,12 +35,12 @@ namespace DVAESABot.Dialogs
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            var userInput = (await item).Text;
+            var searchQuery = (await item).Text;
 
             if (context.UserData.TryGetValue(typeof(ChatContext).Name, out ChatContext cc))
                 using (var ac = FactSheetSearchClient.CreateDefault())
                 {
-                    var results = await ac.GetTopMatchingFactsheets(userInput, 50);
+                    var results = await ac.GetTopMatchingFactsheets(searchQuery, 50);
                     cc.FactsheetShortlist = results.Results.Select(r => new FactSheetWithScore(r)).ToList();
                     var hf = new HeuristicsFacade();
                     hf.ApplyHeuristics(cc);
@@ -67,7 +66,7 @@ namespace DVAESABot.Dialogs
             else
             {
                 await context.PostAsync("Can't find anything at all on that.");
-                context.Done(new Tuple<bool, string>(false, userInput));
+                context.Done(new Tuple<bool, string>(false, searchQuery));
             }
         }
 
@@ -87,7 +86,6 @@ namespace DVAESABot.Dialogs
                 Data = $"{sheet.FactsheetId}"
             }));
             
-
             var notInterestedAction = new SubmitAction
             {
                 Title = "Not interested in any of these",
