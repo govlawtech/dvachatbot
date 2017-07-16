@@ -194,13 +194,14 @@
     <Compile Include="Dialogs\AzureSearchDialog.cs" />
     <Compile Include="Dialogs\CuratedQuestionsDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
-    <Compile Include="Dialogs\GetDateDialog.cs" />
+    <Compile Include="Dialogs\EnlistmentDateDialog.cs" />
     <Compile Include="Dialogs\HeuristicsParentDialog.cs" />
     <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
     <Compile Include="Dialogs\LuisMRCADialog.cs" />
     <Compile Include="Dialogs\NumberDialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\SeekingTreatmentDialog.cs" />
     <Compile Include="Dialogs\UserTypeDialog.cs" />
     <Compile Include="Dialogs\YesNoDialog.cs" />
     <Compile Include="Domain\ChatContext.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="GlobalMessageHandlersBotModule.cs" />
     <Compile Include="ScheduledHeuristics\HeuristicQnAs\MemberTypeHeuristicQnA.cs" />
     <Compile Include="ScheduledHeuristics\HeuristicQnAs\SeekingTreatmentQnA.cs" />
+    <Compile Include="ScheduledHeuristics\HeuristicsFacade.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristicQnA.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />

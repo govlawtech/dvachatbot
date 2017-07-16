@@ -27,7 +27,7 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 
         public bool IsRelevant(ChatContext chatContext)
         {
-            var categoriesForTreatmentAndRehab = new[] {"HSV", "MRC"};
+            var categoriesForTreatmentAndRehab = new[] {"HSV", "MRC", "VVCS"};
 
             var shortlistedCatagories = chatContext.FactsheetShortlist.GetCategories();
 

@@ -25,6 +25,5 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
                    chatContext.FactsheetShortlist.GetCategories().Count() > 1;
         }
 
-
     }
 }

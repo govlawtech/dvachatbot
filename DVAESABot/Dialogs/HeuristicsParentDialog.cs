@@ -1,44 +1,52 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using DVAESABot.Domain;
+using DVAESABot.ScheduledHeuristics;
 using DVAESABot.ScheduledHeuristics.HeuristicQnAs;
 using Microsoft.Bot.Builder.Dialogs;
+using NodaTime;
 
 namespace DVAESABot.Dialogs
 {
-    public class HeuristicsParentDialog : IDialog<object>
+    [Serializable]
+    public class HeuristicsParentDialog : IDialog<string>
     {
-        private readonly MemberTypeHeuristicQnA _memberTypeHeuristicQnA = new MemberTypeHeuristicQnA();
-        private readonly SeekingTreatmentQnA _seekingTreatmentQnA = new SeekingTreatmentQnA();
+        private readonly HeuristicsFacade _heuristicsFacade = new HeuristicsFacade();
 
         public async Task StartAsync(IDialogContext context)
         {
-            context.Call(_memberTypeHeuristicQnA.Dialog, ResumeAfterUserTypeQuestion);
+            context.Call(new UserTypeDialog(),Resume);
         }
 
-        private async Task ResumeAfterUserTypeQuestion(IDialogContext dialogContext, IAwaitable<UserType> userType)
+
+        private async Task Resume(IDialogContext context, IAwaitable<UserType> result)
         {
-            var cc = dialogContext.GetChatContextOrDefault();
-            _memberTypeHeuristicQnA.SetResult(cc,
-                userType.GetAwaiter().GetResult());
-            dialogContext.SetChatContext(cc);
+           
+                if (result.GetAwaiter().GetResult() == UserType.Member)
+                {
+                    context.Call(new EnlistmentDateDialog(), (dialogContext, awaitable) => FinishHeuristics(dialogContext));
 
-            if (_seekingTreatmentQnA.IsRelevant(cc))
-            {
-                dialogContext.Call(_seekingTreatmentQnA.Dialog, ResumeAfterTreatmentQuestion);
-            }
-            else
-            {
-                dialogContext.Done(true);
-            }
-        }
+                }
+                else
+                {
+                    FinishHeuristics(context);
+                }
+           
+         }
 
-        private async Task ResumeAfterTreatmentQuestion(IDialogContext dialogContext,
-            IAwaitable<bool> isSeekingTreatment)
+        private async Task FinishHeuristics(IDialogContext context)
         {
-            _seekingTreatmentQnA.SetResult(dialogContext.GetChatContextOrDefault(),
-                isSeekingTreatment.GetAwaiter().GetResult());
-
-            dialogContext.Done(true);
+                var cc = context.GetChatContextOrDefault();
+                _heuristicsFacade.ApplyHeuristics(cc);
+                context.SetChatContext(cc);
+                context.Done(true);
+           
         }
+
+
+     
     }
+
+    
 }

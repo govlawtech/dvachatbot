@@ -28,6 +28,9 @@ namespace DVAESABot.Dialogs
         private async Task ResponseReceived(IDialogContext context, IAwaitable<UserType> activity)
         {
             var userType = await activity;
+            var cc = context.GetChatContextOrDefault();
+            cc.User.UserType = userType;
+            context.SetChatContext(cc);
             context.Done(userType);
         }
     }

@@ -16,7 +16,6 @@ namespace DVAESABot.Dialogs
         {
             context.Wait(Resume); 
         }
-
         private async Task Resume(IDialogContext dialogContext, IAwaitable<IMessageActivity> message)
         {
             
