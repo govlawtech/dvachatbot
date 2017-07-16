@@ -17,21 +17,22 @@ namespace DVAESABot.Dialogs
         }
 
         private async Task ResumeAfterCuratedQuestionsDialog(IDialogContext context,
-            IAwaitable<Tuple<bool, string>> answerWasDisplayed)
+            IAwaitable<Tuple<bool, string>> answerWasDisplayedAndAnswer)
         {
-            var answerShown = await answerWasDisplayed;
-            if (answerShown.Item1)
-                context.Call(new CuratedQuestionsDialog(), (dialogContext, result) => StartAsync(context));
+            var answerWasShown = answerWasDisplayedAndAnswer.GetAwaiter().GetResult().Item1;
+            var answerShown = answerWasDisplayedAndAnswer.GetAwaiter().GetResult().Item2;
+            if (answerWasShown)
+                context.Call(new CuratedQuestionsDialog(), ResumeAfterCuratedQuestionsDialog);
             else
                 await context.Forward(new AzureSearchDialog(), ResumeAfterSearchDialog,
-                    new Activity {Text = answerShown.Item2});
+                    new Activity {Text = answerShown});
         }
 
-        private async Task ResumeAfterSearchDialog(IDialogContext context, IAwaitable<Tuple<bool, string>> result)
+        private async Task ResumeAfterSearchDialog(IDialogContext context, IAwaitable<Tuple<SearchSelection, string>> result)
         {
             var awaitedResult = await result;
-            var factsheetWasChosen = awaitedResult.Item1;
-            if (factsheetWasChosen)
+            var userResponseToSearchResults = awaitedResult.Item1;
+            if (userResponseToSearchResults == SearchSelection.TopicSelected)
             {
                 var chosenFactSheetTitle = awaitedResult.Item2;
                 
@@ -42,7 +43,11 @@ namespace DVAESABot.Dialogs
                     context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), LandingPad);
                 }
             }
-
+            else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
+            {
+                await context.Forward(new AzureSearchDialog(), ResumeAfterSearchDialog,
+                    new Activity { Text = awaitedResult.Item2 });
+            }
             else
             {
                 context.Call(new HeuristicsParentDialog(), LandingPad);
