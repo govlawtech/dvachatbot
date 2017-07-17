@@ -17,9 +17,6 @@ namespace DVAESABot.ScheduledHeuristics.HeuristicQnAs
 
         public IDialog<bool> Dialog => _dialog;
 
-      
-
-
         public void SetResult(ChatContext chatContext, bool result)
         {
             chatContext.User.SeekingTreatmentOrRehab = result;

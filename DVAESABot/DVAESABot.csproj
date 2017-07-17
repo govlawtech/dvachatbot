@@ -195,9 +195,10 @@
     <Compile Include="Dialogs\CuratedQuestionsDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
     <Compile Include="Dialogs\EnlistmentDateDialog.cs" />
+    <Compile Include="Dialogs\MenuOptionChosen.cs" />
+    <Compile Include="Dialogs\GlobalMenuDialog.cs" />
     <Compile Include="Dialogs\HeuristicsParentDialog.cs" />
     <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
-    <Compile Include="Dialogs\LuisMRCADialog.cs" />
     <Compile Include="Dialogs\NumberDialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="QnaMaker\QnaMaker.cs" />
     <Compile Include="QnaMaker\QnaMakerResult.cs" />
     <Compile Include="Scorables\FeedbackScorable.cs" />
+    <Compile Include="Scorables\MenuScorable.cs" />
     <Compile Include="Scorables\ResetScorable.cs" />
     <Compile Include="Search\FactSheetSearchClient.cs" />
     <Compile Include="Utilities\AppInsightsActivityLogger.cs" />

@@ -43,7 +43,7 @@ namespace DVAESABot.Scorables
 
         protected override double GetScore(IActivity item, string state)
         {
-            return 1.0;
+            return 0.9;
         }
 
         protected override async Task PostAsync(IActivity item, string state, CancellationToken token)

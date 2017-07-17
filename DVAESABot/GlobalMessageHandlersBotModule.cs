@@ -17,12 +17,7 @@ namespace DVAESABot
             base.Load(builder);
 
             builder
-                .Register(c => new ResetScorable(c.Resolve<IDialogTask>()))
-                .As<IScorable<IActivity, double>>()
-                .InstancePerLifetimeScope();
-
-            builder
-                .Register(c => new FeedbackScorable(c.Resolve<IDialogTask>()))
+                .Register(c => new MenuScorable(c.Resolve<IDialogTask>()))
                 .As<IScorable<IActivity, double>>()
                 .InstancePerLifetimeScope();
 

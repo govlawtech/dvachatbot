@@ -32,6 +32,7 @@ namespace DVAESABot.Dialogs
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
+            await context.SayAsync("Looking for topics...");
             var searchQuery = (await item).Text;
 
             var cc = context.GetChatContextOrDefault();

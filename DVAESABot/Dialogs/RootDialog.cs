@@ -10,9 +10,16 @@ namespace DVAESABot.Dialogs
     [Serializable]
     public class RootDialog : IDialog<object>
     {
+        private ChatContext chatContext;
+
+        public RootDialog(ChatContext existingChatContext = null)
+        {
+            chatContext = existingChatContext ?? ChatContext.CreateEmpty();
+        }
+
         public async Task StartAsync(IDialogContext context)
         {
-            context.SetChatContext(ChatContext.CreateEmpty());
+            context.SetChatContext(chatContext);
             context.Call(new CuratedQuestionsDialog(), ResumeAfterCuratedQuestionsDialog);
         }
 
@@ -40,7 +47,7 @@ namespace DVAESABot.Dialogs
                 if (factsheet != null)
                 {
                     var url = factsheet.FactSheet.Url;
-                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), LandingPad);
+                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), Menu);
                 }
             }
             else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
@@ -73,7 +80,7 @@ namespace DVAESABot.Dialogs
                 if (factsheet != null)
                 {
                     var url = factsheet.FactSheet.Url;
-                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), LandingPad);
+                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), Menu);
                 }
             }
             else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
@@ -87,7 +94,7 @@ namespace DVAESABot.Dialogs
             }
         }
 
-        private async Task LandingPad(IDialogContext context, IAwaitable<object> result)
+        private async Task Menu(IDialogContext context, IAwaitable<object> result)
         {
             context.Call(new CuratedQuestionsDialog(), ResumeAfterCuratedQuestionsDialog);
         }
