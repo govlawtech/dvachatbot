@@ -14,7 +14,9 @@ namespace DVAESABot.Dialogs
 
         public RootDialog(ChatContext existingChatContext = null)
         {
+            
             chatContext = existingChatContext ?? ChatContext.CreateEmpty();
+
         }
 
         public async Task StartAsync(IDialogContext context)

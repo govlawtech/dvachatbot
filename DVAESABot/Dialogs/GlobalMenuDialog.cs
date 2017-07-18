@@ -59,10 +59,10 @@ namespace DVAESABot.Dialogs
 
             else if (chosenOption == MenuOptionChosen.Restart)
             {
-                var root = new RootDialog(context.GetChatContextOrDefault());
+                await context.SayAsync("Please describe the topic you are interested in.");
+                var root = new RootDialog(existingChatContext: context.GetChatContextOrDefault());
                 context.Call(root,Resume);
             }
-
 
         }
 
