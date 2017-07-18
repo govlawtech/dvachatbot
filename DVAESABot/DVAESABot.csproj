@@ -199,7 +199,6 @@
     <Compile Include="Dialogs\MenuOptionChosen.cs" />
     <Compile Include="Dialogs\GlobalMenuDialog.cs" />
     <Compile Include="Dialogs\HeuristicsParentDialog.cs" />
-    <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
     <Compile Include="Dialogs\NumberDialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
