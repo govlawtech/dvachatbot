@@ -58,7 +58,6 @@ namespace DVAESABot.Dialogs
             else if (userResponseToSearchResults == SearchSelection.NotInterestedExpressed)
             {
                 context.Call(new HeuristicsParentDialog(), ResumeAfterHeuristicsRun);
-
             }
         }
 

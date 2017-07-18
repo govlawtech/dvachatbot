@@ -27,6 +27,7 @@ namespace DVAESABot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
+            await context.SayAsync("Please describe the topic you are interested in.");   
             context.Wait(MessageReceivedAsync);
         }
 
