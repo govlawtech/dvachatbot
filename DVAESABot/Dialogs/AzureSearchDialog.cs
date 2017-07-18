@@ -25,15 +25,15 @@ namespace DVAESABot.Dialogs
         private readonly string NOT_INTERESTED_TEXT = "NI";
         private readonly int RESULTS_TO_RETRIEVE = 50;
 
+       
         public async Task StartAsync(IDialogContext context)
         {
-            await context.SayAsync("Please describe the topic you are interested in.");   
             context.Wait(MessageReceivedAsync);
         }
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            await context.SayAsync("Looking for topics...");
+            await context.SayAsync("...looking for relevant topics...");
             var searchQuery = (await item).Text;
 
             var cc = context.GetChatContextOrDefault();

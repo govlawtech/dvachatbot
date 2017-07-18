@@ -195,6 +195,7 @@
     <Compile Include="Dialogs\CuratedQuestionsDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
     <Compile Include="Dialogs\EnlistmentDateDialog.cs" />
+    <Compile Include="Dialogs\FeedbackDialog.cs" />
     <Compile Include="Dialogs\MenuOptionChosen.cs" />
     <Compile Include="Dialogs\GlobalMenuDialog.cs" />
     <Compile Include="Dialogs\HeuristicsParentDialog.cs" />

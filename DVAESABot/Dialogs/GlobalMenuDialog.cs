@@ -13,10 +13,14 @@ namespace DVAESABot.Dialogs
     {
         public async Task StartAsync(IDialogContext context)
         {
-            var promptOptions = new PromptOptions<MenuOptionChosen>(
-                prompt: "Menu:",
-                options: new List<MenuOptionChosen>() { MenuOptionChosen.Restart, MenuOptionChosen.Feedback, MenuOptionChosen.Contact},
-                descriptions: new List<string>() {"Find a topic", "Give feedback", "Contact a person"});
+            var promptOptions = new PromptOptions<string>(
+                
+                prompt: "Choose one:",
+                attempts: 1,
+                retry: "Try again:",
+                tooManyAttempts: "Select one of the options.",
+                options: new List<string>() { "Restart", "Feedback", "Contact"},
+                descriptions: new List<string>() {"New topic: restart", "Give feedback", "Contact a person"});
             
             PromptDialog.Choice(context,
                 OptionChosen,
@@ -24,10 +28,22 @@ namespace DVAESABot.Dialogs
             );
         }
 
-        private async Task OptionChosen(IDialogContext context, IAwaitable<MenuOptionChosen> optionChosen)
+        private async Task OptionChosen(IDialogContext context, IAwaitable<string> optionChosen)
         {
-            var chosenOption = await optionChosen;
 
+            string chosenOptionString = null;
+            
+            try
+            {
+                chosenOptionString = await optionChosen;
+            }
+            catch (TooManyAttemptsException e)
+            {
+                await this.StartAsync(context);
+            }
+
+            var chosenOption = (MenuOptionChosen)Enum.Parse(typeof(MenuOptionChosen), chosenOptionString);
+            
             if (chosenOption == MenuOptionChosen.Contact)
             {
                 var contactMessage = context.MakeMessage();
@@ -36,11 +52,18 @@ namespace DVAESABot.Dialogs
                 context.Done(chosenOption);
             }
 
+            else if (chosenOption == MenuOptionChosen.Feedback)
+            {
+                context.Call(new FeedbackDialog(), Resume);
+            }
+
             else if (chosenOption == MenuOptionChosen.Restart)
             {
                 var root = new RootDialog(context.GetChatContextOrDefault());
                 context.Call(root,Resume);
             }
+
+
         }
 
         private async Task Resume(IDialogContext context, IAwaitable<object> result)
