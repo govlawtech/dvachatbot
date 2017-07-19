@@ -14,9 +14,7 @@ namespace DVAESABot.Dialogs
 
         public RootDialog(ChatContext existingChatContext = null)
         {
-            
             chatContext = existingChatContext ?? ChatContext.CreateEmpty();
-
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -49,7 +47,7 @@ namespace DVAESABot.Dialogs
                 if (factsheet != null)
                 {
                     var url = factsheet.FactSheet.Url;
-                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), Menu);
+                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), ResumeAfterQnADialog);
                 }
             }
             else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
@@ -81,7 +79,7 @@ namespace DVAESABot.Dialogs
                 if (factsheet != null)
                 {
                     var url = factsheet.FactSheet.Url;
-                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), Menu);
+                    context.Call(new QnAFactsheetDialog(chosenFactSheetTitle, url), ResumeAfterQnADialog);
                 }
             }
             else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
@@ -95,9 +93,9 @@ namespace DVAESABot.Dialogs
             }
         }
 
-        private async Task Menu(IDialogContext context, IAwaitable<object> result)
+        private async Task ResumeAfterQnADialog(IDialogContext context, IAwaitable<object> result)
         {
-            context.Call(new CuratedQuestionsDialog(), ResumeAfterCuratedQuestionsDialog);
+            context.Call(new TopicSelectionDialog(), ResumeAfterTopicSelection);
         }
     }
 }

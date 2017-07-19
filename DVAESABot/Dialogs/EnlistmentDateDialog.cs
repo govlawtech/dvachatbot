@@ -12,7 +12,7 @@ using NodaTime;
 namespace DVAESABot.Dialogs
 {
     [Serializable]
-    public class EnlistmentDateDialog : IDialog<LocalDate>
+    public class EnlistmentDateDialog : IDialog<LocalDate?>
     {
         private int attempts = 0;
      
@@ -26,7 +26,10 @@ namespace DVAESABot.Dialogs
         {
             if (attempts > 3)
             {
-                throw new TooManyAttemptsException("Too many attempts to specify a date.") 
+                await context.SayAsync("...skipping this question...");
+                LocalDate? nullDate = null;
+                context.Done(nullDate);
+
             }
 
             var text = await message;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using AdaptiveCards;
 using Microsoft.Azure.Search.Models;
 using Microsoft.Bot.Builder.Dialogs;
 
@@ -30,6 +31,13 @@ namespace DVAESABot.Domain
             return cutDown.ToList();
         }
 
+        public static void DropFactsheetWithTitle(this List<FactSheetWithScore> factSheetsWithScores, string title)
+        {
+            var toDrop = factSheetsWithScores.SingleOrDefault(f => f.FactSheet.FactsheetId == title);
+            if (toDrop != null)
+                factSheetsWithScores.Remove(toDrop);
+        }
+
         public static List<FactSheetWithScore> RemoveAllExceptWithKeyWords(this List<FactSheetWithScore> factSheetWithScores, params string[] keywords)
         {
             var cutDown = from doc in factSheetWithScores
@@ -38,7 +46,7 @@ namespace DVAESABot.Domain
 
             return cutDown.ToList();
         }
-
+        
         public static IEnumerable<string> GetCategories(this List<FactSheetWithScore> factSheetWithScores)
         {
             return factSheetWithScores.Select(fs => fs.FactSheet.GetCategoryCode()).ToList();

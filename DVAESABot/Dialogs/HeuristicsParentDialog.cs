@@ -30,7 +30,7 @@ namespace DVAESABot.Dialogs
                 }
                 else
                 {
-                    FinishHeuristics(context);
+                    await FinishHeuristics(context);
                 }
            
          }

@@ -13,6 +13,4 @@ namespace DVAESABot.ScheduledHeuristics
         IDialog<TDialogResult> Dialog { get; }
         bool IsRelevant(ChatContext chatContext);
     }
-
-
 }

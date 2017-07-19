@@ -4,6 +4,7 @@ using Microsoft.Azure.Search.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -26,10 +27,14 @@ namespace DVAESABot.Search
             {
                 SearchMode = SearchMode.Any,
                 QueryType = QueryType.Simple,
-                Top = topNumber                
+                Top = topNumber
+ 
             };
 
+            var sw = Stopwatch.StartNew();
             var result = await _searchIndexClient.Documents.SearchAsync<FactSheet>(searchQuery, searchParameters);
+            sw.Stop();
+            Debug.Print("SEARCH TIME: " + sw.ElapsedMilliseconds);
             return result;            
         }
 

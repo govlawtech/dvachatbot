@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using DVAESABot.Domain;
 using DVAESABot.QnaMaker;
 using DVAESABot.QnAMaker;
 using Microsoft.Bot.Builder.Dialogs;
@@ -12,7 +13,7 @@ using Microsoft.Bot.Connector;
 namespace DVAESABot.Dialogs
 {
     [Serializable]
-    public class QnAFactsheetDialog : IDialog<string>
+    public class QnAFactsheetDialog : IDialog<object>
     {
         private static readonly List<string> FailureMessagesSelection = new List<string>
         {
@@ -52,7 +53,6 @@ namespace DVAESABot.Dialogs
                 if (questionsAndAnswers.ContainsKey("Purpose"))
                 {
                     var outlineMessage = context.MakeMessage();
-                    outlineMessage.TextFormat = "plain";
                     outlineMessage.Text = RemoveFactsheetReferenceFromPurposeSection(questionsAndAnswers["Purpose"]);
                     await context.PostAsync(outlineMessage);
                 }
@@ -72,7 +72,12 @@ namespace DVAESABot.Dialogs
             {
                 await context.SayAsync(
                     $"Try <a href=\"{_factSheetUrl}\" target=\"_blank\">this factsheet</a> on DVA's website.");
-                context.Done("Done");
+
+                var cc = context.GetChatContextOrDefault();
+                cc.FactsheetShortlist.DropFactsheetWithTitle(_factSheetTitle);
+                context.SetChatContext(cc);
+                context.Done(false);
+
             }
         }
 
