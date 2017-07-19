@@ -26,7 +26,7 @@ namespace DVAESABot.Dialogs
         {
             if (attempts > 3)
             {
-                throw new TooManyAttemptsException("Too many attempts to specify a date.");
+                throw new TooManyAttemptsException("Too many attempts to specify a date.") 
             }
 
             var text = await message;
