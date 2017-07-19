@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using AdaptiveCards;
 using Microsoft.Azure.Search.Models;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.Domain
 {
    
-    public static class FactsheetShortlistExensions
+    public static class FactsheetShortlistExtensions
     {
      
         public static List<FactSheetWithScore> RemoveAllCategoriesOtherThan(this List<FactSheetWithScore> factSheetWithScores, params string[] categoryCodes)
@@ -29,6 +31,13 @@ namespace DVAESABot.Domain
             return cutDown.ToList();
         }
 
+        public static void DropFactsheetWithTitle(this List<FactSheetWithScore> factSheetsWithScores, string title)
+        {
+            var toDrop = factSheetsWithScores.SingleOrDefault(f => f.FactSheet.FactsheetId == title);
+            if (toDrop != null)
+                factSheetsWithScores.Remove(toDrop);
+        }
+
         public static List<FactSheetWithScore> RemoveAllExceptWithKeyWords(this List<FactSheetWithScore> factSheetWithScores, params string[] keywords)
         {
             var cutDown = from doc in factSheetWithScores
@@ -37,6 +46,21 @@ namespace DVAESABot.Domain
 
             return cutDown.ToList();
         }
+
+        public static List<FactSheetWithScore> RemoveFactsheetsWithKeyWords(
+            this List<FactSheetWithScore> factSheetWithScores, params string[] keywords)
+        {
+            var cutDown =
+                factSheetWithScores.Where(f => f.FactSheet.CuratedKeyWords.All(w => !keywords.ToList().Contains(w)));
+
+            return cutDown.ToList();
+        }
+        
+        public static IEnumerable<string> GetCategories(this List<FactSheetWithScore> factSheetWithScores)
+        {
+            return factSheetWithScores.Select(fs => fs.FactSheet.GetCategoryCode()).ToList();
+        }
+        
     }
 
     public static class FactsheetExtensions
@@ -49,4 +73,39 @@ namespace DVAESABot.Domain
             return factsheetCode.Value.Contains(categoryCode);
         }
     }
+
+    public static class DialogContextExtensions
+    {
+        public static ChatContext GetChatContextOrDefault(this IDialogContext dialogContext)
+        {
+            dialogContext.UserData.TryGetValue(typeof(ChatContext).Name, out ChatContext cc);
+            return cc;
+        }
+
+        public static void SetChatContext(this IDialogContext dialogContext, ChatContext chatContext)
+        {
+            dialogContext.UserData.SetValue(typeof(ChatContext).Name,chatContext);
+        }
+
+        public static int GetNumberOfFactSheetsInShortlist(this IDialogContext dialogContext)
+        {
+            var cc = dialogContext.GetChatContextOrDefault();
+            var fsCount = cc.FactsheetShortlist.Count;
+            return fsCount;
+        }
+
+        public static void AddSearchQuery(this IDialogContext dialogContext, string query)
+        {
+            var cc = dialogContext.GetChatContextOrDefault();
+            cc.PreviousQueries.Add(query);
+            dialogContext.SetChatContext(cc);
+        }
+
+        public static string GetLastSearchQuery(this IDialogContext dialogContext)
+        {
+            return dialogContext.GetChatContextOrDefault().PreviousQueries.LastOrDefault();
+        }
+    }
+
+    
 }

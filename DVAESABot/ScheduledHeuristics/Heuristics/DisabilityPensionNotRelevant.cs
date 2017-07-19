@@ -10,7 +10,6 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
     class DisabilityPensionNotRelevant : IScheduledHeuristic
     {
         public string Description => "Member enlisted before 1 July 2004, therefore disability pension not relevant";
-        public int Salience => 60;
 
         public Predicate<ChatContext> Condition => c =>
         {

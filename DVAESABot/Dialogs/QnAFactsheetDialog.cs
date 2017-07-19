@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using DVAESABot.Domain;
 using DVAESABot.QnaMaker;
 using DVAESABot.QnAMaker;
 using Microsoft.Bot.Builder.Dialogs;
@@ -12,12 +13,14 @@ using Microsoft.Bot.Connector;
 namespace DVAESABot.Dialogs
 {
     [Serializable]
-    public class QnAFactsheetDialog : IDialog<string>
+    public class QnAFactsheetDialog : IDialog<object>
     {
         private static readonly List<string> FailureMessagesSelection = new List<string>
         {
             "Don't have an answer to that within this topic specifically."
         };
+
+        private static readonly string BACK = "⇦ Back";
 
         [NonSerialized] private static readonly Random _random = new Random();
         private readonly string _factSheetCode;
@@ -44,41 +47,46 @@ namespace DVAESABot.Dialogs
 
         public async Task StartAsync(IDialogContext context)
         {
-            var factSheetName = DialogHelper.ExtractTopicFromFactSheetTitle(_factSheetTitle);
-            var hintMessage = new StringBuilder();
-
+            
             var questionsAndAnswers = await _qnaMaker.GetQuestionsAndAnswers(_kbId);
 
             if (questionsAndAnswers.Any())
             {
                 if (questionsAndAnswers.ContainsKey("Purpose"))
-                    hintMessage.AppendLine(RemoveFactsheetReferenceFromPurposeSection(questionsAndAnswers["Purpose"]));
+                {
+                    var outlineMessage = context.MakeMessage();
+                    outlineMessage.Text = RemoveFactsheetReferenceFromPurposeSection(ReplaceDoubleNewLineWithMarkDown(questionsAndAnswers["Purpose"]));
+                    await context.PostAsync(outlineMessage);
+                }
+                
+                List<string> options = questionsAndAnswers.Keys.Where(q => q != "Purpose").ToList();
+                options.Add(BACK);
 
-                IEnumerable<string> qsInKb = questionsAndAnswers.Keys.Where(q => q != "Purpose").ToList();
+                
 
                 PromptDialog.Choice(
                     context,
                     QnAQuestionReceived,
-                    qsInKb,
+                    options,
                     "Pick one:",
                     "Try again:",
                     3
                 );
-
-
-                //hintMessage.AppendLine("<br>Suggested questions:");
-                //var suggestions = String.Join("", qsInKb.Select(o => $"<li>{o}</li>"));
-                //var suggestionText = $"<ul>{suggestions}</ul>";
-                //hintMessage.Append(suggestionText);
             }
             else
             {
                 await context.SayAsync(
                     $"Try <a href=\"{_factSheetUrl}\" target=\"_blank\">this factsheet</a> on DVA's website.");
-                context.Done("Done");
+
+                var cc = context.GetChatContextOrDefault();
+                cc.FactsheetShortlist.DropFactsheetWithTitle(_factSheetTitle);
+                context.SetChatContext(cc);
+                context.Done(false);
+
             }
         }
 
+        
 
         [OnDeserialized]
         internal void _deserialized(StreamingContext context)
@@ -90,33 +98,44 @@ namespace DVAESABot.Dialogs
         private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<string> activity)
         {
             var message = (await activity);
-
-            var qnaResult = await _qnaMaker.SearchFaqAsync(message, _kbId);
-            string replyContent;
-
-            if (qnaResult == null || !qnaResult.Answers.Any() ||
-                qnaResult.Answers.First().Answer == "No good match found in the KB")
+            if (message == BACK)
             {
-                replyContent = FailureMessagesSelection[_random.Next(0, FailureMessagesSelection.Count)];
-                await context.PostAsync(replyContent);
+                context.Done(true);
             }
             else
             {
-                replyContent = qnaResult.Answers.First().Answer;
-                await context.PostAsync(replyContent);
-            }
+                var qnaResult = await _qnaMaker.SearchFaqAsync(message, _kbId);
+                string replyContent;
 
-            context.Wait(async (dialogContext, result) =>
-            {
-                var nextMessage = (await result).Text;
-                await QnAQuestionReceived(dialogContext, Awaitable.FromItem(nextMessage));
-            });
+                if (qnaResult == null || !qnaResult.Answers.Any() ||
+                    qnaResult.Answers.First().Answer == "No good match found in the KB")
+                {
+                    replyContent = FailureMessagesSelection[_random.Next(0, FailureMessagesSelection.Count)];
+                    await context.PostAsync(replyContent);
+                }
+                else
+                {
+                    replyContent = qnaResult.Answers.First().Answer;
+                    await context.PostAsync(replyContent);
+                }
+
+                context.Wait(async (dialogContext, result) =>
+                {
+                    var nextMessage = (await result).Text;
+                    await QnAQuestionReceived(dialogContext, Awaitable.FromItem(nextMessage));
+                });
+            }
 
         }
 
         private static string RemoveFactsheetReferenceFromPurposeSection(string purposeText)
         {
             return purposeText.Replace("This Factsheet", "This topic");
+        }
+
+        private static string ReplaceDoubleNewLineWithMarkDown(string text)
+        {
+            return text.Replace(@"\n\n",@" ");
         }
     }
 }

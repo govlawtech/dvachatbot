@@ -4,7 +4,6 @@ using System.Linq;
 using DVAESABot.Domain;
 using DVAESABot.ScheduledHeuristics;
 using DVAESABot.ScheduledHeuristics.Heuristics;
-using DVAESABot.ScheduledHeuristics.Heuristics.Questions;
 using DVAESABot.Search;
 using DVAESABot.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -34,6 +33,9 @@ namespace DVAESABot.Tests
             Console.WriteLine("Number of shortlisted facsheets after heuristic run: " + c.FactsheetShortlist.Count);
             Assert.IsTrue(secondRun < firstRun);
         }
+
+       
+
     }
 
 

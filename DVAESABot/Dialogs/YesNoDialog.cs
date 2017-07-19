@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.Dialogs;
 
 namespace DVAESABot.Dialogs
 {
-    public class YesNoDialog : IDialog<bool>
+    public class YesNoDialog : IDialog<bool>, IDialog
     {
         private readonly string _prompt;
 
@@ -20,7 +20,7 @@ namespace DVAESABot.Dialogs
                 AnswerReceived,
                 _prompt,
                 "Yes or no.",
-                99
+                3
                 );
         }
 

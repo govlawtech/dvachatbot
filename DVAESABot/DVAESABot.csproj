@@ -191,15 +191,20 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Dialogs\AgeDialog.cs" />
     <Compile Include="Dialogs\AzureSearchDialog.cs" />
     <Compile Include="Dialogs\CuratedQuestionsDialog.cs" />
     <Compile Include="Dialogs\DialogHelper.cs" />
-    <Compile Include="Dialogs\GetDateDialog.cs" />
-    <Compile Include="Dialogs\HeuristicYesNoDialog.cs" />
-    <Compile Include="Dialogs\LuisMRCADialog.cs" />
+    <Compile Include="Dialogs\EnlistmentDateDialog.cs" />
+    <Compile Include="Dialogs\FeedbackDialog.cs" />
+    <Compile Include="Dialogs\MenuOptionChosen.cs" />
+    <Compile Include="Dialogs\GlobalMenuDialog.cs" />
+    <Compile Include="Dialogs\HeuristicsParentDialog.cs" />
     <Compile Include="Dialogs\NumberDialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
+    <Compile Include="Dialogs\SeekingTreatmentDialog.cs" />
+    <Compile Include="Dialogs\TopicSelectionDialog.cs" />
     <Compile Include="Dialogs\UserTypeDialog.cs" />
     <Compile Include="Dialogs\YesNoDialog.cs" />
     <Compile Include="Domain\ChatContext.cs" />
@@ -213,19 +218,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalMessageHandlersBotModule.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\ISSNotRelevant.cs" />
+    <Compile Include="ScheduledHeuristics\HeuristicsFacade.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\NoAgedCareForNonAgedPeople.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\NoMCSForMRCAEnlistees.cs" />
+    <Compile Include="ScheduledHeuristics\IHeuristicQnA.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\PensionsNotRelevant.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\NoF111Deseal.cs" />
     <Compile Include="ScheduledHeuristics\Heuristics\DisabilityPensionNotRelevant.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\Questions\MemberTypeQuestion.cs" />
-    <Compile Include="ScheduledHeuristics\Heuristics\Questions\SeekingTreatmentOrQuestion.cs" />
-    <Compile Include="ScheduledHeuristics\IHaveDialog.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\MemberTypeQuestion.cs" />
+    <Compile Include="ScheduledHeuristics\Heuristics\SeekingTreatmentQuestion.cs" />
     <Compile Include="ScheduledHeuristics\IHeuristic.cs" />
-    <Compile Include="ScheduledHeuristics\ScheduledHeuristicsFacade.cs" />
     <Compile Include="ScheduledHeuristics\Scheduler.cs" />
-    <Compile Include="Heuristics\EnlistBefore1July2004Heuristic.cs" />
-    <Compile Include="Heuristics\IHeuristic.cs" />
-    <Compile Include="Heuristics\IsMemberHeuristic.cs" />
-    <Compile Include="Heuristics\JobLinedUpHeuristic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -236,6 +239,7 @@
     <Compile Include="QnaMaker\QnaMaker.cs" />
     <Compile Include="QnaMaker\QnaMakerResult.cs" />
     <Compile Include="Scorables\FeedbackScorable.cs" />
+    <Compile Include="Scorables\MenuScorable.cs" />
     <Compile Include="Scorables\ResetScorable.cs" />
     <Compile Include="Search\FactSheetSearchClient.cs" />
     <Compile Include="Utilities\AppInsightsActivityLogger.cs" />
@@ -276,9 +280,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\ScheduledHeuristics\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

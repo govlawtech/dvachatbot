@@ -1,11 +1,10 @@
 ﻿using System;
-using DVAESABot.Dialogs;
 using DVAESABot.Domain;
-using Microsoft.Bot.Builder.Dialogs;
+using DVAESABot.ScheduledHeuristics.HeuristicQnAs;
 
-namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
+namespace DVAESABot.ScheduledHeuristics
 {
-    class MemberTypeQuestion : IScheduledHeuristic, IHaveDialog<UserType>
+    class MemberTypeQuestion : IScheduledHeuristic, IHaveDialogs
     {
         public string Description => "Member Type";
 
@@ -43,14 +42,12 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
             }
         };
 
-        public IDialog<UserType> GetDialog()
-        {
-            return new UserTypeDialog();
-        }
 
-        public void ApplyResult(UserType result, ChatContext chatContext)
+        public dynamic HeuristicQnAs => new[]
         {
-            chatContext.User.UserType = result;
-        }
+            new MemberTypeHeuristicQnA()
+        };
     }
+
+    
 }

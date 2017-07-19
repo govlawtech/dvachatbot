@@ -20,20 +20,11 @@ namespace DVAESABot.ScheduledHeuristics
             _availableHeuristics.AddRange(_heuristicsRuleBase);
             _chatContext = chatContext;
         }
-
-        public Option<IScheduledHeuristic> GetTopOfAgenda()
-        {
-            if (_agenda.Any())
-            {
-                return Option.Some(_agenda.First());
-            }
-            return Option.None<IScheduledHeuristic>();
-        }
+        
 
         public void Run()
         {
             ActivateHeuristics(_chatContext);
-            _agenda = _agenda.OrderByDescending(h => h.Salience).ToList();
 
             while (_agenda.Count > 0)
             {

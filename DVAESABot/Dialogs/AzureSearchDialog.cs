@@ -1,28 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AdaptiveCards;
-using Chronic;
 using DVAESABot.Domain;
-using DVAESABot.Heuristics;
+using DVAESABot.ScheduledHeuristics;
 using DVAESABot.Search;
-using Microsoft.Azure.Search.Models;
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 
 namespace DVAESABot.Dialogs
 {
+    public enum SearchSelection
+    {
+        TopicSelected,
+        NotInterestedExpressed,
+        SomethingElseTyped
+    }
+
     /// <summary>
     ///     Dialog that interacts with Azure Search.
     /// </summary>
     [Serializable]
-    public class AzureSearchDialog : IDialog<Tuple<bool,string>>
+    public class AzureSearchDialog : IDialog<Tuple<SearchSelection, string>>
     {
-        private readonly string _initialSearchText;
-        private const int RESULTS_TO_DISPLAY = 5;
+        private readonly string NOT_INTERESTED_TEXT = "NI";
+        private readonly int RESULTS_TO_RETRIEVE = 50;
 
-        
+       
         public async Task StartAsync(IDialogContext context)
         {
             context.Wait(MessageReceivedAsync);
@@ -30,78 +33,36 @@ namespace DVAESABot.Dialogs
 
         private async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> item)
         {
-            var userInput = (await item).Text;
+            await context.SayAsync("...looking for relevant topics...");
+            var searchQuery = (await item).Text;
+            
+            context.AddSearchQuery(searchQuery);
 
-            if (context.UserData.TryGetValue(typeof(ChatContext).Name, out ChatContext cc))
+            var cc = context.GetChatContextOrDefault();
+
+            using (var ac = FactSheetSearchClient.CreateDefault())
             {
-                using (var ac = FactSheetSearchClient.CreateDefault())
-                {
-                    var results = await ac.GetTopMatchingFactsheets(userInput, 5);
-                    cc.FactsheetShortlist = results.Results.Select(r => new FactSheetWithScore(r)).ToList();
-                    context.UserData.SetValue(typeof(ChatContext).Name,cc);
-                }
+                var results = await ac.GetTopMatchingFactsheets(searchQuery, RESULTS_TO_RETRIEVE);
+                cc.FactsheetShortlist = results.Results.Select(r => new FactSheetWithScore(r)).ToList();
+                var hf = new HeuristicsFacade();
+                hf.ApplyHeuristics(cc);
+                context.UserData.SetValue(typeof(ChatContext).Name, cc);
             }
 
             if (cc.FactsheetShortlist.Any())
             {
-                var replyToConversation = context.MakeMessage();
-                replyToConversation.Attachments = new List<Attachment>()
-                {
-                    new Attachment()
-                    {
-                        ContentType = AdaptiveCard.ContentType,
-                        Content = BuildCard("Suggested topics:",
-                            cc.FactsheetShortlist.Take(RESULTS_TO_DISPLAY).Select(fs => fs.FactSheet).ToList())
-                    }
-                };
-
-                await context.PostAsync(replyToConversation);
-                context.Wait(ReplyToFactSheetQuestion);
+                context.Call(new TopicSelectionDialog(), Resume);
             }
             else
             {
                 await context.PostAsync("Can't find anything at all on that.");
-                context.Done(new Tuple<bool,string>(false,userInput));
+                context.Wait(MessageReceivedAsync);
             }
-            
         }
 
-
-        private AdaptiveCard BuildCard(string message, List<FactSheet> factsheets)
+        private async Task Resume(IDialogContext context, IAwaitable<Tuple<SearchSelection, string>> result)
         {
-            var card = new AdaptiveCard();
-            
-            card.Body.Add(new TextBlock
-            {
-                Text = message 
-            });
-
-            factsheets.ForEach(sheet => card.Actions.Add(new SubmitAction
-            {
-                Title = $"{DialogHelper.GetWrappedFactsheetTitle(sheet.FactsheetId, 30)}",
-                Data = $"{sheet.FactsheetId}"
-            }));
-
-            return card;
-        }
-
-        private async Task ReplyToFactSheetQuestion(IDialogContext context, IAwaitable<IMessageActivity> item)
-        {
-            var reply = await item;
-
-            if (context.UserData.TryGetValue(typeof(ChatContext).Name, out ChatContext cc))
-            {
-                
-                if (cc.FactsheetShortlist.Select(fs => fs.FactSheet.FactsheetId).Any(i => i == reply.Text))
-                {
-                    context.Done(new Tuple<bool,string>(true,reply.Text));
-                }
-
-                else
-                {
-                    await this.MessageReceivedAsync(context, item);
-                }
-            }
+            context.Done(result.GetAwaiter().GetResult());
         }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Chronic.Tags.Repeaters;
 
@@ -78,7 +79,8 @@ namespace DVAESABot.Dialogs
         // Helper method for extracting 'Factsheet XXXNN - ' and just return the text after the '-'
         public static string ExtractTopicFromFactSheetTitle(string factSheetTitle)
         {
-            return factSheetTitle.Substring(factSheetTitle.IndexOf(" - ") + 3);
+            var stripped = Regex.Replace(factSheetTitle, "Factsheet [A-Z0-9-]+ -?", "").Trim();
+            return stripped;
         }
 
         public static string GetWrappedFactsheetTitle(string fullFactSheetTitle, int cols)

@@ -30,6 +30,7 @@ namespace DVAESABot.Domain
        Member,
        DependentOnMember,
        DependentOnDeceasedMember,
-       Organisation
+       Organisation,
+       Other
     }
 }

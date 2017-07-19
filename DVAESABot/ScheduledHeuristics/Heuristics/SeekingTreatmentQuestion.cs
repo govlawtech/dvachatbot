@@ -1,23 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using DVAESABot.Domain;
-using Microsoft.Bot.Builder.Dialogs;
 
-namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
+namespace DVAESABot.ScheduledHeuristics.Heuristics
 {
-    internal class SeekingTreatmentOrQuestion : IScheduledHeuristic, IHaveDialog<bool>
+    internal class SeekingTreatmentQuestion : IScheduledHeuristic
     {
-        public IDialog<bool> GetDialog()
-        {
-           throw new NotImplementedException();
-        }
-
+       
         public void ApplyResult(bool result, ChatContext chatContext)
         {
             chatContext.User.SeekingTreatmentOrRehab = result;
         }
 
         public string Description => "Member seeking treatment or rehab, therefore limit to MRC, HSV and VVCS";
-        public int Salience => 150;
 
         public Predicate<ChatContext> Condition => c =>
         {
@@ -29,5 +24,7 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics.Questions
 
         public Action<ChatContext> Action => c => c.FactsheetShortlist = c.FactsheetShortlist.RemoveAllCategoriesOtherThan("MRC", "HSV",
             "VVCS");
+
+       
     }
 }

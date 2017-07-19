@@ -7,7 +7,6 @@ namespace DVAESABot.ScheduledHeuristics.Heuristics
     internal class NoF111Deseal : IScheduledHeuristic
     {
         public string Description => "Remove F111 deseal factsheets because member and enlisted after deseal.";
-        public int Salience => 51;
 
         public Predicate<ChatContext> Condition => c =>
         {

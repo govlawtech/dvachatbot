@@ -17,19 +17,21 @@ namespace DVAESABot.Domain
 
         public static ChatContext CreateEmpty()
         {
-            return new ChatContext(new User(), new List<FactSheetWithScore>(),new Selections());
+            return new ChatContext(new User(), new List<FactSheetWithScore>(), new List<string>());
         }
         
-        public ChatContext(User user, List<FactSheetWithScore> factsheetShortlist, Selections selections)
+        public ChatContext(User user, List<FactSheetWithScore> factsheetShortlist, List<string> previousQueries)
         {
             User = user;
             FactsheetShortlist = factsheetShortlist;
-            Selections = selections;
+            PreviousQueries = previousQueries;
+
         }
         
         public User User { get; set; }
         public List<FactSheetWithScore> FactsheetShortlist { get; set; }
-        public Selections Selections { get; set; }
+        public List<string> PreviousQueries { get; set; }
+        
 
     }
 }
