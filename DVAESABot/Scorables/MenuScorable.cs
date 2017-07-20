@@ -27,7 +27,7 @@ namespace DVAESABot.Scorables
 
         protected override async Task<string> PrepareAsync(IActivity item, CancellationToken token)
         {
-            var triggers = new[] {"menu", "cancel","help","stop","go back","back"};
+            var triggers = new[] {"menu", "help"};
 
             var message = item as IMessageActivity;
             if (message != null && !string.IsNullOrWhiteSpace(message.Text))
