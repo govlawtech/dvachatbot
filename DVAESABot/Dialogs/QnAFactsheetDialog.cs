@@ -82,7 +82,6 @@ namespace DVAESABot.Dialogs
                 cc.FactsheetShortlist.DropFactsheetWithTitle(_factSheetTitle);
                 context.SetChatContext(cc);
                 context.Done(false);
-
             }
         }
 

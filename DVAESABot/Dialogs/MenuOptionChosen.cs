@@ -8,6 +8,7 @@ namespace DVAESABot.Dialogs
     {
         Restart,
         Feedback,
-        Contact
+        Contact,
+        Cancel
     }
 }

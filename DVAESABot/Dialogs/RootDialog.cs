@@ -53,7 +53,7 @@ namespace DVAESABot.Dialogs
             }
             else if (userResponseToSearchResults == SearchSelection.SomethingElseTyped)
             {
-                await context.Forward(new AzureSearchDialog(), ResumeAfterTopicSelection,
+                await context.Forward(new CuratedQuestionsDialog(), ResumeAfterCuratedQuestionsDialog,
                     new Activity { Text = awaitedResult.Item2 });
             }
             else if (userResponseToSearchResults == SearchSelection.NotInterestedExpressed)

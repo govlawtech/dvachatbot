@@ -19,8 +19,8 @@ namespace DVAESABot.Dialogs
                 attempts: 1,
                 retry: "Try again:",
                 tooManyAttempts: "Select one of the options.",
-                options: new List<string>() { "Restart", "Feedback", "Contact"},
-                descriptions: new List<string>() {"New topic: restart", "Give feedback", "Contact a person"});
+                options: new List<string>() { "Restart", "Feedback", "Contact", "Cancel"},
+                descriptions: new List<string>() {"Restart", "Give feedback", "Contact a person", "Cancel"});
             
             PromptDialog.Choice(context,
                 OptionChosen,
@@ -61,7 +61,11 @@ namespace DVAESABot.Dialogs
             {
                 await context.SayAsync("Please describe the topic you are interested in.");
                 var root = new RootDialog(existingChatContext: context.GetChatContextOrDefault());
-                context.Call(root,Resume);
+                context.Call(root, Resume);
+            }
+            else
+            {
+                context.Done(MenuOptionChosen.Cancel);
             }
 
         }
