@@ -15,7 +15,7 @@ namespace DVAESABot.Dialogs
     public class TopicSelectionDialog : IDialog<Tuple<SearchSelection, string>>
     {
         public static readonly int RESULTS_TO_DISPLAY = 3;
-        private readonly string NOT_INTERESTED_TEXT = "NI";
+        private readonly string NOT_INTERESTED_TEXT = "not interested in any of these";
         public async Task StartAsync(IDialogContext context)
         {
             Contract.Requires(context.GetNumberOfFactSheetsInShortlist() > 0);
