@@ -84,7 +84,7 @@ namespace DVAESABot.Dialogs
         private async Task ResumeAfterMoreDetailProvided(IDialogContext context, IAwaitable<IMessageActivity> result)
         {
             var additionalDetail = result.GetAwaiter().GetResult().Text;
-            var queryConcatenatedWithLast = context.GetLastSearchQuery() + additionalDetail;
+            var queryConcatenatedWithLast = context.GetLastSearchQuery() + " " + additionalDetail;
             await context.Forward(new AzureSearchDialog(), ResumeAfterTopicSelection,
                 new Activity() {Text = queryConcatenatedWithLast});
         }
