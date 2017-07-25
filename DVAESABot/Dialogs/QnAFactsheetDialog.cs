@@ -59,9 +59,11 @@ namespace DVAESABot.Dialogs
                     await context.PostAsync(outlineMessage);
                 }
                 
-                List<string> options = questionsAndAnswers.Keys.Where(q => q != "Purpose").ToList();
+                List<string> options = questionsAndAnswers.Keys.Where(q => q != "Purpose")
+                    .Select(k => DialogHelper.Wrap(k,35))
+                    .ToList();
                 options.Add(BACK);
-
+                
                 
 
                 PromptDialog.Choice(
@@ -70,7 +72,8 @@ namespace DVAESABot.Dialogs
                     options,
                     "Pick one:",
                     "Try again:",
-                    3
+                    10
+                    
                 );
             }
             else
@@ -96,7 +99,16 @@ namespace DVAESABot.Dialogs
 
         private async Task QnAQuestionReceived(IDialogContext context, IAwaitable<string> activity)
         {
-            var message = (await activity);
+            string message = null;
+            try
+            {
+                message = (await activity);
+            }
+            catch (TooManyAttemptsException e)
+            {
+                await context.SayAsync("Let's just go back.");
+                context.Done(false);
+            }
             if (message == BACK)
             {
                 context.Done(true);
@@ -136,5 +148,8 @@ namespace DVAESABot.Dialogs
         {
             return text.Replace(@"\n\n",@" ");
         }
+
+
+
     }
 }

@@ -200,13 +200,11 @@
     <Compile Include="Dialogs\MenuOptionChosen.cs" />
     <Compile Include="Dialogs\GlobalMenuDialog.cs" />
     <Compile Include="Dialogs\HeuristicsParentDialog.cs" />
-    <Compile Include="Dialogs\NumberDialog.cs" />
     <Compile Include="Dialogs\QnAFactsheetDialog.cs" />
     <Compile Include="Dialogs\RootDialog.cs" />
     <Compile Include="Dialogs\SeekingTreatmentDialog.cs" />
     <Compile Include="Dialogs\TopicSelectionDialog.cs" />
     <Compile Include="Dialogs\UserTypeDialog.cs" />
-    <Compile Include="Dialogs\YesNoDialog.cs" />
     <Compile Include="Domain\ChatContext.cs" />
     <Compile Include="Domain\FactSheet.cs" />
     <Compile Include="Domain\FactsheetShortlist.cs" />
@@ -244,7 +242,6 @@
     <Compile Include="Search\FactSheetSearchClient.cs" />
     <Compile Include="Utilities\AppInsightsActivityLogger.cs" />
     <Compile Include="Utilities\FileActivityLogger.cs" />
-    <Compile Include="Utilities\Option.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
