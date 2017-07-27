@@ -38,6 +38,9 @@ namespace DVAESABot.Dialogs
 
         private async Task Resume(IDialogContext context, IAwaitable<double> result)
         {
+            var cc = context.GetChatContextOrDefault();
+            cc.User.Age = (int)result.GetAwaiter().GetResult(); 
+            context.SetChatContext(cc);
             context.Done((int)result.GetAwaiter().GetResult());
         }
     }
