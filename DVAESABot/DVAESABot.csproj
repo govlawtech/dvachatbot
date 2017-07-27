@@ -178,6 +178,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\bot drawing.svg" />
     <Content Include="images\funnel.png" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
@@ -262,6 +263,7 @@
     <None Include="Properties\PublishProfiles\dvachatbot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\dvachatbot - Web Deploy.pubxml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
+    <None Include="Properties\PublishProfiles\dvachatbotwestus - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
