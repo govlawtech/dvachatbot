@@ -54,7 +54,8 @@ namespace DVAESABot
                 {
                     var connector = new ConnectorClient(new Uri(message.ServiceUrl));
                     var botId = WebConfigurationManager.AppSettings["BotId"];
-                    if (update.MembersAdded.Any(ma => ma.Name == botId || ma.Name == "Bot")) // "Bot" is for emulator
+                    var botDisplayName = "Chappie";
+                    if (update.MembersAdded.Any(ma => ma.Name == botId || ma.Name == botDisplayName || ma.Name == "Bot")) // "Bot" is for emulator
                     {
                         var greeting =
                             message.CreateReply(
