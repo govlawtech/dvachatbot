@@ -59,15 +59,15 @@ namespace DVAESABot
                     {
                         var greeting =
                             message.CreateReply(
-                                "Hello, I'm Chappie, DVA's <b>computerised, electronic</b> chat bot. See (<a href='https://dvachatbot.azurewebsites.net/privacy.html' target='_blank'>Privacy information</a>.)",
+                                "Hello, I'm Chappie, DVA's computerised, electronic chat bot.  I can answer many common questions.  (Note I can't access any of your personal history with DVA or the ADF.)  [See privacy info.](https://dvachatbot.azurewebsites.net/privacy.html)",
                                 "en");
                         connector.Conversations.ReplyToActivityAsync(greeting)
-                            .ContinueWith(task => Task.Delay(2000).Wait())
+                            .ContinueWith(task => Task.Delay(1000).Wait())
                             .ContinueWith(task =>
                             {
                                 var instruction =
                                     message.CreateReply(
-                                        "Please describe the <b>topic</b> you are interested in.");
+                                        "Please describe the topic you are interested in.");
                                 connector.Conversations.ReplyToActivityAsync(instruction);
                             });
                     }
