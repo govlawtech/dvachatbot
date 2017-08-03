@@ -79,7 +79,7 @@ namespace DVAESABot.Dialogs
             else
             {
                 await context.SayAsync(
-                    $"Try <a href=\"{_factSheetUrl}\" target=\"_blank\">this factsheet</a> on DVA's website.");
+                    $"Try [this factsheet]({_factSheetUrl}) on DVA's website.");
 
                 var cc = context.GetChatContextOrDefault();
                 cc.FactsheetShortlist.DropFactsheetWithTitle(_factSheetTitle);
