@@ -12,7 +12,7 @@ namespace DVAESABot.Dialogs
 {
     public class UserTypeDialog : IDialog<UserType>
     {
-        private static readonly string MEMBER = "Member";
+        private static readonly string MEMBER = "Member or former member";
         private static readonly string DEPENDENT = "Dependent on a member";
         private static readonly string DEPENDENT_ON_DECEASED = "Dependent on a deceased member";
         private static readonly string ORGANISATION = "Organisation";

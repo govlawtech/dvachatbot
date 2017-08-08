@@ -43,6 +43,8 @@ namespace DVAESABot.Dialogs
             var parserOptions = new Options()
             {
                 Context = Pointer.Type.Past,
+                EndianPrecedence = EndianPrecedence.Little
+                
             };
             var parser = new Chronic.Parser(parserOptions);
             
@@ -50,6 +52,7 @@ namespace DVAESABot.Dialogs
             if (span != null && span.Start.HasValue)
             {
                 var dt = span.Start.Value;
+               
                 var d = new LocalDate(dt.Year, dt.Month, dt.Day);
 
                 var ldp = LocalDatePattern.CreateWithInvariantCulture("D");

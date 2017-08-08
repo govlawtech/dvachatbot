@@ -25,7 +25,7 @@ namespace DVAESABot
                 .InstancePerDependency();
             builder.Update(Conversation.Container);
 
-            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["AppInsightsKey"];
+//            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["AppInsightsKey"];
         }
 
         private void RegisterBotModules()

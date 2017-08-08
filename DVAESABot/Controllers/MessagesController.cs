@@ -67,7 +67,7 @@ namespace DVAESABot
                             {
                                 var instruction =
                                     message.CreateReply(
-                                        "Please describe the topic you are interested in.");
+                                        "Type **'menu'** at any time for options.");
                                 connector.Conversations.ReplyToActivityAsync(instruction);
                             });
                     }

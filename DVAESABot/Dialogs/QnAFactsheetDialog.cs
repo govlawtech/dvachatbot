@@ -15,12 +15,7 @@ namespace DVAESABot.Dialogs
     [Serializable]
     public class QnAFactsheetDialog : IDialog<object>
     {
-        private static readonly List<string> FailureMessagesSelection = new List<string>
-        {
-            "Don't have an answer to that within this topic specifically."
-        };
-
-        private static readonly string BACK = "⇦ Back";
+              private static readonly string BACK = "⇦ Back";
 
         [NonSerialized] private static readonly Random _random = new Random();
         private readonly string _factSheetCode;
@@ -31,6 +26,7 @@ namespace DVAESABot.Dialogs
 
 
         [NonSerialized] private QnaMakerClient _qnaMaker;
+        private string _factsheetTopic;
 
         public QnAFactsheetDialog()
         {
@@ -43,6 +39,7 @@ namespace DVAESABot.Dialogs
             _factSheetCode = DialogHelper.ExtractFactsheetCodeFromFactSheeTitle(factSheetTitle);
             _kbId = KbId.kbIDs[_factSheetCode];
             _qnaMaker = new QnaMakerClient();
+            _factsheetTopic = DialogHelper.ExtractTopicFromFactSheetTitle(_factSheetTitle);
         }
 
         public async Task StartAsync(IDialogContext context)
@@ -64,8 +61,6 @@ namespace DVAESABot.Dialogs
                     .ToList();
                 options.Add(BACK);
                 
-                
-
                 PromptDialog.Choice(
                     context,
                     QnAQuestionReceived,
@@ -121,8 +116,8 @@ namespace DVAESABot.Dialogs
                 if (qnaResult == null || !qnaResult.Answers.Any() ||
                     qnaResult.Answers.First().Answer == "No good match found in the KB")
                 {
-                    replyContent = FailureMessagesSelection[_random.Next(0, FailureMessagesSelection.Count)];
-                    await context.PostAsync(replyContent);
+                    string reply = ($"Can't find an answer to that in the topic: *{_factsheetTopic}*.  Type 'menu' for options, or try another question.");
+                    await context.PostAsync(reply);
                 }
                 else
                 {
