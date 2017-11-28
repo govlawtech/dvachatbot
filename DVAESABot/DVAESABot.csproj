@@ -27,6 +27,7 @@
     <TargetFrameworkProfile />
     <ApplicationInsightsResourceId>/subscriptions/334e4dce-793a-4c27-b4e0-38f41076e7b2/resourcegroups/dvachatbot/providers/microsoft.insights/components/dvachatbotwestus</ApplicationInsightsResourceId>
     <ApplicationInsightsAnnotationResourceId>/subscriptions/334e4dce-793a-4c27-b4e0-38f41076e7b2/resourceGroups/dvachatbot/providers/microsoft.insights/components/dvachatbotwestus</ApplicationInsightsAnnotationResourceId>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -267,7 +268,7 @@
     <None Include="Properties\PublishProfiles\dvachatbot - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\dvachatbot - Web Deploy.pubxml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
-    <None Include="Properties\PublishProfiles\dvachatbotwestus - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\dvachatbotdemo - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
